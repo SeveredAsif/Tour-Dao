@@ -9,7 +9,7 @@ const HotelPage = () => {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
-
+  const [hotelsData, setHotelsData] = useState(null); // State to store hotels data
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,18 +22,16 @@ const HotelPage = () => {
       guests: guests
     };
 
-    console.log(params)
-
     try {
       // Make API request to fetch hotels
       const response = await axios.post('http://localhost:4000/hotels/search', params);
-      console.log(response)
+      console.log('Response:', response.data); // Log the response data to console
+      setHotelsData(response.data); // Store response data in state
     } catch (error) {
       console.error('Error fetching hotels:', error);
       // Handle error state or display error message
     }
   };
-
 
   return (
     <div className="hotel-page">
@@ -75,9 +73,24 @@ const HotelPage = () => {
           <button type="submit" className="search-button">
             Search
           </button>
-          
         </form>
-       
+
+        {/* Display hotels data if available */}
+        {hotelsData && hotelsData.hotels && (
+          <div className="hotels-list">
+            <h2>Found Hotels:</h2>
+            <ul>
+              {hotelsData.hotels.map((hotel, index) => (
+                <li key={index}>
+                  <p>Name: {hotel.name}</p>
+                  <p>Country: {hotel.country}</p>
+                  <p>Number of Hotels: {hotel.hotels}</p>
+                  <img src={hotel.image_url} alt={hotel.name} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
