@@ -91,7 +91,25 @@ app.put("/destinations/:id", (req, res) => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
 //hotels
+
+
+
+
+
+
+
 
 
 
