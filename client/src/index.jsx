@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./Pages/App";
-import FlightPage from "./Pages/FlightPage";
+import FlightPageApp from "./Pages/FlightPageApp";
 import HotelPage from "./Pages/HotelPage";
 import HomePage from "./Pages/Homepage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/flights",
-    element: <FlightPage />,
+    element: <FlightPageApp />,
   },
   {
     path: "/hotels",
