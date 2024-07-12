@@ -1,8 +1,8 @@
-// src/FlightPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './FlightPage.css';
+import Autocomplete from './AutoComplete';
 
 const FlightPage = () => {
   const [from, setFrom] = useState('BOM');
@@ -34,6 +34,7 @@ const FlightPage = () => {
     axios.post('http://localhost:4000/flights/search', searchParams)
       .then(response => {
         setLoading(false);
+        console.log(searchParams);
         navigate('/results', { state: { flights: response.data.flights } });
       })
       .catch(err => {
@@ -48,11 +49,11 @@ const FlightPage = () => {
       <form onSubmit={handleSubmit} className="flight-form">
         <label>
           From:
-          <input type="text" value={from} onChange={(e) => setFrom(e.target.value)} />
+          <Autocomplete value={from} onChange={setFrom} placeholder="Enter departure location" />
         </label>
         <label>
           To:
-          <input type="text" value={to} onChange={(e) => setTo(e.target.value)} />
+          <Autocomplete value={to} onChange={setTo} placeholder="Enter destination location" />
         </label>
         <label>
           Departure Date:

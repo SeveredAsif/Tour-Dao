@@ -11,7 +11,6 @@ const port = 4000;
 app.use(express.json());
 app.use(cors()); // Enable CORS
 
-
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
 const db = initDb(dbFilePath);
@@ -168,7 +167,7 @@ app.post("/flights/search", (req, res) => {
   const rapidApiEndpoint =
     "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
   const rapidApiHeaders = {
-    "x-rapidapi-key": "ef609bca72msha460ddd3d4261e7p12b5b7jsn3ef8a8dd62b2",
+    "x-rapidapi-key": "d76dc60036msh0cbf83ab768fa61p17d7dcjsne50e065a42c4",
     "x-rapidapi-host": "tripadvisor16.p.rapidapi.com",
   };
   const {
@@ -192,10 +191,10 @@ app.post("/flights/search", (req, res) => {
     classOfService,
     returnDate: returnDate || undefined,
     pageNumber: 1,
-    nearby: 'yes',
-    nonstop: 'yes',
-    currencyCode: 'USD',
-    region: 'USA',
+    nearby: "yes",
+    nonstop: "yes",
+    currencyCode: "USD",
+    region: "USA",
   };
 
   // Make a request to RapidAPI
@@ -209,6 +208,7 @@ app.post("/flights/search", (req, res) => {
 
       // Insert the fetched flight data into the database
       insertFlightData(flights);
+      console.log("everything ok");
 
       // Respond with the flights data
       res.json({ flights });
@@ -249,10 +249,10 @@ app.post("/flights/search", (req, res) => {
     classOfService,
     returnDate: returnDate || undefined,
     pageNumber: 1,
-    nearby: 'yes',
-    nonstop: 'yes',
-    currencyCode: 'USD',
-    region: 'USA',
+    nearby: "yes",
+    nonstop: "yes",
+    currencyCode: "USD",
+    region: "USA",
   };
 
   // Make a request to RapidAPI
@@ -276,29 +276,7 @@ app.post("/flights/search", (req, res) => {
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 //hotels
-
-
-
-
-
-
-
-
-
-
 
 // Start the Express server
 app.listen(port, () => {
