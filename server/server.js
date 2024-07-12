@@ -3,20 +3,17 @@ const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
+const initDb = require("./initDb");
 const port = 4000;
 
 // Middleware to parse JSON
 app.use(express.json());
 app.use(cors()); // Enable CORS
 
-// Connect to the SQLite database
-const db = new sqlite3.Database("./tour.db", (err) => {
-  if (err) {
-    console.error("Error connecting to database: " + err.message);
-  } else {
-    console.log("Connected to the SQLite database.");
-  }
-});
+
+// Initialize the SQLite database
+const dbFilePath = "./tour.db";
+const db = initDb(dbFilePath);
 
 // Route to get all destinations
 app.get("/destinations", (req, res) => {
