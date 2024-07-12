@@ -291,57 +291,57 @@ app.post("/flights/search", (req, res) => {
 //hotels
 
 
+// Define endpoint for hotel search
 
+
+// Function to insert hotel data into the database
 const insertHotelData = (hotels) => {
-  // Check if 'hotels' is an array
-  if (Array.isArray(hotels)) {
-    hotels.forEach((hotel) => {
-      const {
-        dest_id,
-        search_type,
-        city_ufi,
-        label,
-        dest_type,
-        nr_hotels,
-        latitude,
-        longitude,
-        country,
-        type,
-        city_name,
-        cc1,
-        region,
-        name,
-        lc,
-        image_url,
-        roundtrip
-      } = hotel;
+  hotels.forEach((hotel) => {
+    const {
+      dest_id,
+      search_type,
+      city_ufi,
+      label,
+      dest_type,
+      nr_hotels,
+      latitude,
+      longitude,
+      country,
+      type,
+      city_name,
+      cc1,
+      region,
+      name,
+      lc,
+      image_url,
+      hotels,
+      roundtrip
+    } = hotel;
 
-      const sql = `
-        INSERT INTO hotel_destinations (
-          dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
-          latitude, longitude, country, type, city_name, cc1, region,
-          name, lc, image_url, roundtrip
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-      const params = [
+    const sql = `
+      INSERT INTO destinations (
         dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
         latitude, longitude, country, type, city_name, cc1, region,
-        name, lc, image_url, roundtrip
-      ];
+        name, lc, image_url, hotels, roundtrip
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-      db.run(sql, params, (err) => {
-        if (err) {
-          console.error('Error inserting hotel data:', err.message);
-        } else {
-          console.log('Hotel data inserted successfully');
-        }
-      });
+    const params = [
+      dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
+      latitude, longitude, country, type, city_name, cc1, region,
+      name, lc, image_url, hotels, roundtrip
+    ];
+
+    db.run(sql, params, (err) => {
+      if (err) {
+        console.error('Error inserting hotel data:', err.message);
+      } else {
+        console.log('Hotel data inserted successfully');
+      }
     });
-  } else {
-    console.error('Expected an array of hotels but received:', typeof hotels);
-  }
+  });
 };
+
 
 app.post('/hotels/search', (req, res) => {
   const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination';
@@ -354,9 +354,7 @@ app.post('/hotels/search', (req, res) => {
 
   const params = {
     query: destination,
-    checkin_date: checkIn,
-    checkout_date: checkOut,
-    guests: guests,
+  
   };
 
   axios.get(rapidApiEndpoint, {
@@ -364,7 +362,9 @@ app.post('/hotels/search', (req, res) => {
     params: params,
   })
   .then((response) => {
-    const hotels = response.data.data;
+    const hotels = response.data;
+
+    console.log(hotels)
 
     // Insert the fetched hotel data into the database
     insertHotelData(hotels);
@@ -377,7 +377,6 @@ app.post('/hotels/search', (req, res) => {
     res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
   });
 });
-
 
 
 

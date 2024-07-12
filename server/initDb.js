@@ -56,7 +56,7 @@ const initDb = (dbFilePath) => {
 
       db.run(
         `
-      CREATE TABLE IF NOT EXISTS destinations (
+      CREATE TABLE IF NOT EXISTS hotel_destinations (
         dest_id TEXT PRIMARY KEY,
         search_type TEXT,
         city_ufi TEXT,
