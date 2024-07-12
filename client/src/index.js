@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./Pages/App";
 import FlightPage from "./Pages/FlightPage";
+import HotelPage from "./Pages/HotelPage";
 import HomePage from "./Pages/Homepage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/flights",
     element: <FlightPage />,
+  },
+  {
+    path: "/hotels",
+    element: <HotelPage />,
   },
 ]);
 
