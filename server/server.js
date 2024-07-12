@@ -90,6 +90,12 @@ app.put("/destinations/:id", (req, res) => {
   });
 });
 
+
+//hotels
+
+
+
+
 // Start the Express server
 app.listen(port, () => {
   console.log(`Server running on port ${port}!`);
