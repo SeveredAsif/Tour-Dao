@@ -1,0 +1,59 @@
+/* Reset some default styles */
+body, h1, p, ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* General body styles */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* Home page container styles */
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: url('https://via.placeholder.com/1500') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Main heading styles */
+  .home-container h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  }
+  
+  /* Paragraph styles */
+  .home-container p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  }
+  
+  /* Button styles */
+  .home-container .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    text-decoration: none;
+  }
+  
+  .home-container .btn:hover {
+    background-color: #f39c12;
+  }
+  
