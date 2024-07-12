@@ -105,7 +105,22 @@ app.put("/destinations/:id", (req, res) => {
 //hotels
 
 
-
+app.post("/hotels", (req, res) => {
+  const { name, rating, picLink } = req.body;
+  const sql =
+    "INSERT INTO destinations (name, rating, picLink) VALUES (?, ?, ?)";
+  const params = [name, rating, picLink];
+  db.run(sql, params, function (err) {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "success",
+      data: { id: this.lastID },
+    });
+  });
+});
 
 
 

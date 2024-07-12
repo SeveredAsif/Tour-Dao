@@ -3,67 +3,32 @@ import Navbar from '../Components/Navbar';
 import '../css/HotelPage.css';
 import hotelImage from '../pictures/hotel_page.jpg';
 import axios from 'axios'; // Import axios directly
-const https = require('https');
 
 const HotelPage = () => {
   const [destination, setDestination] = useState('');
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
-  const [hotels, setHotels] = useState([]);
 
-  const handleSearch = async () => {
-    // Prepare the request parameters
-
-  };
-
-  const options = {
-    method: 'GET',
-    hostname: 'booking-com.p.rapidapi.com',
-    path: '/v1/hotels/data',
-    headers: {
-      'x-rapidapi-key': '9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824',
-      'x-rapidapi-host': 'booking-com.p.rapidapi.com',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    }
-  };
-  
-  const req = https.request(options, function (res) {
-    const chunks = [];
-  
-    res.on('data', function (chunk) {
-      chunks.push(chunk);
-    });
-  
-    res.on('end', function () {
-      const body = Buffer.concat(chunks);
-      console.log(body.toString());
-    });
-  });
-  
-  req.end();
-
-  const fetchAllHotels = async () => {
-    const options = {
-      method: 'GET',
-      url: 'https://booking-com.p.rapidapi.com/v1/hotels/data',
-      params: {
-       
-        locale: 'en-gb',
-      },
-      headers: {
-        'x-rapidapi-key': '9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824',
-        'x-rapidapi-host': 'booking-com.p.rapidapi.com'
-      }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const url = 'http://localhost:3000/hotels'; // Replace with your server URL
 
     try {
-      const response = await axios.request(options);
-      console.log('Fetched Hotels:', response.data);
-      setHotels(response.data); // Update state with fetched hotels
+      const response = await axios.post(url, {
+        destination,
+        checkIn,
+        checkOut,
+        guests
+      });
+      console.log('Response from server:', response.data);
+      // Optionally, reset the form after successful submission
+      setDestination('');
+      setCheckIn('');
+      setCheckOut('');
+      setGuests(1);
     } catch (error) {
-      console.error('Error fetching hotels:', error);
+      console.error('Error sending data to server:', error);
     }
   };
 
@@ -75,7 +40,7 @@ const HotelPage = () => {
       </div>
       <div className="content">
         <h1>Hotel Search</h1>
-        <div className="search-bar">
+        <form onSubmit={handleSubmit} className="search-bar">
           <input
             type="text"
             placeholder="Destination"
@@ -101,16 +66,13 @@ const HotelPage = () => {
             type="number"
             placeholder="Guests"
             value={guests}
-            onChange={(e) => setGuests(e.target.value)}
+            onChange={(e) => setGuests(parseInt(e.target.value))}
             className="search-input"
           />
-          <button onClick={handleSearch} className="search-button">
+          <button type="submit" className="search-button">
             Search
           </button>
-          <button onClick={fetchAllHotels} className="all-hotels-button">
-            Fetch All Hotels
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   );
