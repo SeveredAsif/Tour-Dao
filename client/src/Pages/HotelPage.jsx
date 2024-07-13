@@ -2,46 +2,54 @@ import React, { useState } from 'react';
 import Navbar from '../Components/Navbar';
 import '../css/HotelPage.css';
 import hotelImage from '../pictures/hotel_page.jpg';
-import axios from 'axios'; // Import axios directly
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const HotelPage = () => {
   const [destination, setDestination] = useState('');
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
-  const [hotelsData, setHotelsData] = useState(null); // State to store hotels data
-
-
-  const handleHotelClick = (dest_id, search_type) => {
-    // Send the data to the backend
-    axios.post('http://localhost:4000/hotels/search/details', { dest_id, search_type })
-      .then(response => {
-        console.log('Data sent successfully:', response.data);
-      })
-      .catch(error => {
-        console.error('Error sending data:', error);
-      });
-    }   
+  const [hotelsData, setHotelsData] = useState(null);
+  
+    const handleHotelClick = (dest_id, search_type) => {
+      // Prepare data to send in the request body
+      const requestData = {
+        dest_id,
+        search_type,
+        destination,
+        checkIn,
+        checkOut,
+        guests
+      };
+  
+      axios.post('http://localhost:4000/hotels/search/details', requestData)
+        .then(response => {
+          console.log('Data sent successfully:', response.data);
+          // Handle response data as needed
+          setHotelsData(response.data.hotels); // Assuming response structure includes hotels
+        })
+        .catch(error => {
+          console.error('Error sending data:', error);
+        });
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare request parameters
     const params = {
-      destination: destination,
-      checkIn: checkIn,
-      checkOut: checkOut,
-      guests: guests
+      destination,
+      checkIn,
+      checkOut,
+      guests
     };
 
     try {
-      // Make API request to fetch hotels
       const response = await axios.post('http://localhost:4000/hotels/search', params);
-      console.log('Response:', response.data); // Log the response data to console
-      setHotelsData(response.data); // Store response data in state
+      console.log('Response:', response.data);
+      setHotelsData(response.data);
     } catch (error) {
       console.error('Error fetching hotels:', error);
-      // Handle error state or display error message
     }
   };
 
@@ -87,7 +95,6 @@ const HotelPage = () => {
           </button>
         </form>
 
-        {/* Display hotels data if available */}
         {hotelsData && hotelsData.hotels && (
           <div className="hotels-list">
             <h2>Found Hotels:</h2>
@@ -97,7 +104,10 @@ const HotelPage = () => {
                   <p>Name: {hotel.name}</p>
                   <p>Country: {hotel.country}</p>
                   <p>Number of Hotels: {hotel.hotels}</p>
-                  <img src={hotel.image_url} alt={hotel.name} />
+                  <Link to="/hotels/search/details">
+                  <img src={hotel.image_url} alt={hotel.name} onClick={() => handleHotelClick(hotel.dest_id, hotel.search_type)}/>
+                 </Link>
+                 
                 </li>
               ))}
             </ul>
