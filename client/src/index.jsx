@@ -7,6 +7,7 @@ import HotelPage from "./Pages/HotelPage";
 import HotelDetails from "./Pages/HotelDetails";
 import HomePage from "./Pages/Homepage";
 import ResultsPage from "./Pages/ResultsPage";
+import ResultsPage2 from "./Pages/ResultsPage2";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -30,6 +31,11 @@ const router = createBrowserRouter([
     path: "/results",
     element: <ResultsPage />,
   },
+  {
+    path: "/results2",
+    element: <ResultsPage2 />,
+  },
+  
   {
     path: "/hotels/search/details",
     element: <HotelDetails />,
