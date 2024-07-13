@@ -11,6 +11,18 @@ const HotelPage = () => {
   const [guests, setGuests] = useState(1);
   const [hotelsData, setHotelsData] = useState(null); // State to store hotels data
 
+
+  const handleHotelClick = (dest_id, search_type) => {
+    // Send the data to the backend
+    axios.post('http://localhost:4000/hotels/search/details', { dest_id, search_type })
+      .then(response => {
+        console.log('Data sent successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
+    }   
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -81,7 +93,7 @@ const HotelPage = () => {
             <h2>Found Hotels:</h2>
             <ul>
               {hotelsData.hotels.map((hotel, index) => (
-                <li key={index}>
+                <li key={index} onClick={() => handleHotelClick(hotel.dest_id, hotel.search_type)}>
                   <p>Name: {hotel.name}</p>
                   <p>Country: {hotel.country}</p>
                   <p>Number of Hotels: {hotel.hotels}</p>

@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./Pages/App";
 import FlightPageApp from "./Pages/FlightPageApp";
 import HotelPage from "./Pages/HotelPage";
+import HotelDetails from "./Pages/HotelDetails";
 import HomePage from "./Pages/Homepage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
     path: "/hotels",
     element: <HotelPage />,
   },
+  {
+    path: "/hotels/search/details",
+    element: <HotelDetails />,
+  }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -351,6 +351,9 @@ app.post('/hotels/search', (req, res) => {
   };
 
   const { destination, checkIn, checkOut, guests } = req.body;
+  req.session.checkIn = checkIn;
+  req.session.checkOut = checkOut;
+  req.session.guests = guests;
 
   const params = {
     query: destination,
@@ -367,7 +370,55 @@ app.post('/hotels/search', (req, res) => {
     const hotels = response.data.data;
 
     // Insert the fetched hotel data into the database
-    insertHotelData(hotels);
+    /*insertHotelData(hotels);*/
+
+    // Respond with the hotels data
+    res.json({ hotels });
+  })
+  .catch((error) => {
+    console.error('Error fetching hotels from Rapid API:', error);
+    res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
+  });
+});
+
+
+app.post('/hotels/search/details', (req, res) => {
+  const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels';
+  const rapidApiHeaders = {
+   'x-rapidapi-key': '9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824',
+    'x-rapidapi-host': 'booking-com15.p.rapidapi.com',
+  };
+
+  const { dest_id_user, search_type_user} = req.body;
+
+  const dest_id = req.session.dest_id;
+  const search_type = req.session.search_type;
+
+
+  const params = {
+    dest_id: dest_id_user,
+    search_type: search_type_user,
+    arrival_date: req.session.checkIn,
+    departure_date: req.session.checkOut,
+    adults: req.session.guests,
+    children_age: '0,17',
+    room_qty: '1',
+    page_number: '1',
+    units: 'metric',
+    temperature_unit: 'c',
+    languagecode: 'en-us',
+    currency_code: 'AED'
+  }
+
+  axios.get(rapidApiEndpoint, {
+    headers: rapidApiHeaders,
+    params: params,
+  })
+  .then((response) => {
+    const hotels = response.data.data;
+
+    // Insert the fetched hotel data into the database
+    /*insertHotelData(hotels);*/
 
     // Respond with the hotels data
     res.json({ hotels });
