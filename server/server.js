@@ -3,24 +3,28 @@ const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
-const session = require('express-session');
+const session = require("express-session");
 const app = express();
 const initDb = require("./initDb");
 const fs = require("fs");
 const csv = require("csv-parser");
-const port = 4000;
+const jwt = require("jsonwebtoken");
 
+const port = 4000;
+const secretKey = "your_secret_key"; // Define your secret key for JWT
 // Middleware to parse JSON
 app.use(express.json());
 app.use(cors()); // Enable CORS
 
 // Configure session middleware
-app.use(session({
-  secret: 'my-secret-key', // replace with your own secret key
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // set secure: true if using HTTPS
-}));
+app.use(
+  session({
+    secret: "my-secret-key", // replace with your own secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // set secure: true if using HTTPS
+  })
+);
 
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
@@ -38,7 +42,7 @@ fs.createReadStream("iata-icao.csv")
   });
 
 app.get("/query", (req, res) => {
-  const sql = "SELECT * FROM flights";
+  const sql = "SELECT * FROM destinations";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -64,7 +68,7 @@ app.get("/airports/search", (req, res) => {
 
 // Route to get all destinations
 app.get("/destinations", (req, res) => {
-  const sql = "SELECT * FROM flights";
+  const sql = "SELECT * FROM destinations";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -208,13 +212,6 @@ const insertFlightData = (flights) => {
     });
   });
 };
-const parseDate = (dateString) => {
-  if (!dateString) return null;
-  const parts = dateString.split("-");
-  if (parts.length !== 3) return null; // Invalid format
-  const [year, month, day] = parts.map((part) => parseInt(part, 10));
-  return new Date(year, month - 1, day);
-};
 
 // Route to search for flights from the database
 app.post("/flights/search", (req, res) => {
@@ -230,21 +227,6 @@ app.post("/flights/search", (req, res) => {
 
   // Validate and parse the departureDate and returnDate
 
-  const departureDateObj = parseDate(departureDate);
-  if (!departureDateObj || isNaN(departureDateObj)) {
-    return res.status(400).json({ error: "Invalid departure date" });
-  }
-  const departureDateISO = departureDateObj.toISOString();
-
-  let returnDateISO;
-  if (returnDate) {
-    const returnDateObj = parseDate(returnDate);
-    if (!returnDateObj || isNaN(returnDateObj)) {
-      return res.status(400).json({ error: "Invalid return date" });
-    }
-    returnDateISO = returnDateObj.toISOString();
-  }
-
   // Construct the SQL query to search for flights based on the given parameters
   let sql = `
     SELECT * FROM flights 
@@ -255,12 +237,6 @@ app.post("/flights/search", (req, res) => {
 
   const params = [from, to, classOfService];
 
-  // If returnDate is provided, add it to the query
-  // if (returnDateISO) {
-  //   sql += " AND DATE(arrivalDateTime) <= ?";
-  //   params.push(returnDateISO);
-  // }
-
   db.all(sql, params, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -270,7 +246,6 @@ app.post("/flights/search", (req, res) => {
       const rowDepartureDate = new Date(row.departureDateTime)
         .toISOString()
         .split("T")[0];
-      //console.log(row.arrivalDateTime);
       return rowDepartureDate === departureDate;
     });
 
@@ -281,7 +256,9 @@ app.post("/flights/search", (req, res) => {
         const rowArrivalDate = new Date(row.arrivalDateTime)
           .toISOString()
           .split("T")[0];
-        console.log(returnDate +" "+rowArrivalDate+" "+row.arrivalDateTime);
+        console.log(
+          returnDate + " " + rowArrivalDate + " " + row.arrivalDateTime
+        );
         return rowArrivalDate === returnDate;
       });
     }
@@ -348,75 +325,15 @@ app.post("/flights/searchh", (req, res) => {
     });
 });
 
-// Function to insert flight data into the database
-// Route to search for flights
-// app.post("/flights/search", (req, res) => {
-//   const rapidApiEndpoint =
-//     "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
-//   const rapidApiHeaders = {
-//     "x-rapidapi-key": "ef609bca72msha460ddd3d4261e7p12b5b7jsn3ef8a8dd62b2",
-//     "x-rapidapi-host": "tripadvisor16.p.rapidapi.com",
-//   };
-//   const {
-//     from,
-//     to,
-//     departureDate,
-//     returnDate,
-//     classOfService,
-//     numAdults,
-//     numChildren,
-//   } = req.body;
-
-//   const params = {
-//     sourceAirportCode: from,
-//     destinationAirportCode: to,
-//     date: departureDate,
-//     itineraryType: returnDate ? "ROUND_TRIP" : "ONE_WAY",
-//     sortOrder: "ML_BEST_VALUE",
-//     numAdults,
-//     numSeniors: 0,
-//     classOfService,
-//     returnDate: returnDate || undefined,
-//     pageNumber: 1,
-//     nearby: "yes",
-//     nonstop: "yes",
-//     currencyCode: "USD",
-//     region: "USA",
-//   };
-
-//   // Make a request to RapidAPI
-//   axios
-//     .get(rapidApiEndpoint, {
-//       headers: rapidApiHeaders,
-//       params: params,
-//     })
-//     .then((response) => {
-//       const flights = response.data.data.flights;
-
-//       // Insert the fetched flight data into the database
-//       insertFlightData(flights);
-
-//       // Respond with the flights data
-//       res.json({ flights });
-//     })
-//     .catch((error) => {
-//       console.error("Error fetching flights from Rapid API:", error);
-//       res.status(500).json({ error: "Error fetching flights from Rapid API" });
-//     });
-// });
-
 //hotels
-
-
-
 app.post("/hotels/search", (req, res) => {
   const rapidApiEndpoint =
     "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination";
   const rapidApiHeaders = {
     "x-rapidapi-key": "9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824",
     "x-rapidapi-host": "booking-com15.p.rapidapi.com",
-    'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
-    'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
+    "x-rapidapi-key": "29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913",
+    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
   };
 
   const { destination, checkIn, checkOut, guests } = req.body;
@@ -424,10 +341,10 @@ app.post("/hotels/search", (req, res) => {
   req.session.checkOut = checkOut;
   req.session.guests = guests;
 
-  console.log(req.session)
+  console.log(req.session);
 
   const params = {
-    query: destination
+    query: destination,
   };
 
   axios
@@ -454,19 +371,12 @@ app.post("/hotels/search/details", (req, res) => {
   const rapidApiEndpoint =
     "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels";
   const rapidApiHeaders = {
-   'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
-    'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
+    "x-rapidapi-key": "29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913",
+    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
   };
 
-
-  const {
-    dest_id,
-    search_type,
-    destination,
-    checkIn,
-    checkOut,
-    guests
-  } = req.body;
+  const { dest_id, search_type, destination, checkIn, checkOut, guests } =
+    req.body;
 
   const params = {
     dest_id: dest_id,
@@ -474,33 +384,103 @@ app.post("/hotels/search/details", (req, res) => {
     arrival_date: checkIn,
     departure_date: checkOut,
     adults: guests,
-    children_age: '0,17',
-    room_qty: '1',
-    page_number: '1',
-    units: 'metric',
-    temperature_unit: 'c',
-    languagecode: 'en-us',
-    currency_code: 'AED'
-  }
+    children_age: "0,17",
+    room_qty: "1",
+    page_number: "1",
+    units: "metric",
+    temperature_unit: "c",
+    languagecode: "en-us",
+    currency_code: "AED",
+  };
 
-  axios.get(rapidApiEndpoint, {
-    headers: rapidApiHeaders,
-    params: params,
-  })
-  .then((response) => {
-    console.log(response)
-    const hotels = response.data.data;
+  axios
+    .get(rapidApiEndpoint, {
+      headers: rapidApiHeaders,
+      params: params,
+    })
+    .then((response) => {
+      console.log(response);
+      const hotels = response.data.data;
 
       // Insert the fetched hotel data into the database
       /*insertHotelData(hotels);*/
 
-    // Respond with the hotels data
-    
-    res.json({ hotels });
-  })
-  .catch((error) => {
-    console.error('Error fetching hotels from Rapid API:', error);
-    res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
+      // Respond with the hotels data
+
+      res.json({ hotels });
+    })
+    .catch((error) => {
+      console.error("Error fetching hotels from Rapid API:", error);
+      res.status(500).json({ error: "Error fetching hotels from Rapid API" });
+    });
+});
+
+//login part endpoints
+app.post("/register", (req, res) => {
+  const { username, password, email } = req.body;
+
+  const sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
+  const params = [username, password, email];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res
+      .status(201)
+      .json({ message: "User registered successfully", userId: this.lastID });
+  });
+});
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
+    }
+    req.user = user;
+    next();
+  });
+};
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  const sql = "SELECT * FROM users WHERE username = ?";
+  db.get(sql, [username], (err, user) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!user || user.password !== password) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    }
+
+    const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
+    res.json({ message: "Login successful", token });
+  });
+});
+
+app.get("/protected", authenticateToken, (req, res) => {
+  console.log(req.user);
+  res.json({ message: "This is a protected route", user: req.user });
+});
+
+app.post('/book', authenticateToken, (req, res) => {
+  const { flightId } = req.body;
+  const userId = req.user.userId;
+
+  const sql = 'INSERT INTO bookings (userId, flightId) VALUES (?, ?)';
+  db.run(sql, [userId, flightId], function(err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Flight booked successfully!' });
   });
 });
 

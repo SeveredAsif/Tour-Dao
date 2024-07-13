@@ -2,14 +2,20 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import '../css/ResultsPage.css';
 import Navbar from '../Components/Navbar'
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 const ResultsPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { flights } = location.state;
 
   const handleDetailClick = (flight) => {
     // Handle the detail button click (e.g., navigate to a detail page or show a modal)
     console.log(flight);
+    navigate('/detail-flight', { state: {flight}  });
   };
 
   return (

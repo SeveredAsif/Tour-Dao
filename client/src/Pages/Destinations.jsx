@@ -12,6 +12,7 @@ const Destinations = () => {
     axios
       .get("http://localhost:4000/destinations")
       .then((response) => {
+        console.log(response.data.data)
         setDestinations(response.data.data);
         setLoading(false);
       })

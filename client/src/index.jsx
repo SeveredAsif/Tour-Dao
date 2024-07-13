@@ -9,10 +9,21 @@ import HomePage from "./Pages/Homepage";
 import ResultsPage from "./Pages/ResultsPage";
 import ResultsPage2 from "./Pages/ResultsPage2";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import DetailFlight from "./Pages/DetailFlight";
+import Login from "./Pages/Login";
+import Registration from "./Pages/Registration"
 
 const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <Login />,
+  },
+  {
     path: "/",
+    element: <Registration />,
+  },
+  {
+    path: "/home",
     element: <HomePage />,
   },
   {
@@ -35,7 +46,10 @@ const router = createBrowserRouter([
     path: "/results2",
     element: <ResultsPage2 />,
   },
-  
+  {
+    path: "/detail-flight",
+    element:<DetailFlight/>
+  },
   {
     path: "/hotels/search/details",
     element: <HotelDetails />,
