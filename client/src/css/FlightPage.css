@@ -8,6 +8,7 @@
   background-color: #1b1b1b;
   color: #ffffff;
   font-family: 'Roboto', sans-serif;
+  position: relative; /* Add relative positioning to parent container */
 }
 
 h1 {
@@ -29,6 +30,7 @@ h1 {
   display: flex;
   flex-direction: column;
   font-size: 1.2em;
+  position: relative; /* Add relative positioning to label for suggestions list */
 }
 
 .flight-form input,
@@ -58,28 +60,28 @@ h1 {
   background-color: #b20710;
 }
 
-.flights-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.flight-card {
-  background: #333;
+.suggestions-list {
   border: 1px solid #444;
-  border-radius: 8px;
-  padding: 15px;
-  width: calc(50% - 20px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  background-color: #2c2c2c;
+  z-index: 1000;
+  width: 100%;
+  position: absolute; /* Position the suggestions list absolutely */
+  top: calc(100% + 5px); /* Position it just below the input field */
+  left: 0;
+  color: #fff; /* Change text color to white for better readability */
 }
 
-.flight-card h2 {
-  margin-top: 0;
-  font-size: 1.5em;
-  color: #e50914;
+.suggestions-list li {
+  padding: 10px;
+  cursor: pointer;
 }
 
-.flight-card p {
-  margin: 5px 0;
-  font-size: 1em;
+.suggestions-list li:hover {
+  background-color: #444;
 }

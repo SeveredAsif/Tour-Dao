@@ -6,6 +6,7 @@ import FlightPageApp from "./Pages/FlightPageApp";
 import HotelPage from "./Pages/HotelPage";
 import HotelDetails from "./Pages/HotelDetails";
 import HomePage from "./Pages/Homepage";
+import ResultsPage from "./Pages/ResultsPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/hotels",
     element: <HotelPage />,
+  },
+  {
+    path: "/results",
+    element: <ResultsPage />,
   },
   {
     path: "/hotels/search/details",

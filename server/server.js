@@ -5,16 +5,40 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const app = express();
 const initDb = require("./initDb");
+const fs = require('fs');
+const csv = require('csv-parser');
 const port = 4000;
 
 // Middleware to parse JSON
 app.use(express.json());
 app.use(cors()); // Enable CORS
 
-
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
 const db = initDb(dbFilePath);
+
+
+let airports = [];
+
+fs.createReadStream('iata-icao.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    airports.push(row);
+  })
+  .on('end', () => {
+    console.log('CSV file successfully processed');
+  });
+
+// Endpoint to search for airports
+app.get('/airports/search', (req, res) => {
+  const query = req.query.query.toLowerCase();
+  const results = airports.filter(airport => 
+    airport.iata.toLowerCase().includes(query) || 
+    airport.airport.toLowerCase().includes(query) ||
+    airport.region_name.toLowerCase().includes(query)
+  );
+  res.json(results);
+});
 
 // Route to get all destinations
 app.get("/destinations", (req, res) => {
@@ -168,7 +192,7 @@ app.post("/flights/search", (req, res) => {
   const rapidApiEndpoint =
     "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
   const rapidApiHeaders = {
-    "x-rapidapi-key": "ef609bca72msha460ddd3d4261e7p12b5b7jsn3ef8a8dd62b2",
+    "x-rapidapi-key": "d76dc60036msh0cbf83ab768fa61p17d7dcjsne50e065a42c4",
     "x-rapidapi-host": "tripadvisor16.p.rapidapi.com",
   };
   const {
@@ -192,10 +216,10 @@ app.post("/flights/search", (req, res) => {
     classOfService,
     returnDate: returnDate || undefined,
     pageNumber: 1,
-    nearby: 'yes',
-    nonstop: 'yes',
-    currencyCode: 'USD',
-    region: 'USA',
+    nearby: "yes",
+    nonstop: "yes",
+    currencyCode: "USD",
+    region: "USA",
   };
 
   // Make a request to RapidAPI
@@ -209,6 +233,7 @@ app.post("/flights/search", (req, res) => {
 
       // Insert the fetched flight data into the database
       insertFlightData(flights);
+      console.log("everything ok");
 
       // Respond with the flights data
       res.json({ flights });
@@ -249,10 +274,10 @@ app.post("/flights/search", (req, res) => {
     classOfService,
     returnDate: returnDate || undefined,
     pageNumber: 1,
-    nearby: 'yes',
-    nonstop: 'yes',
-    currencyCode: 'USD',
-    region: 'USA',
+    nearby: "yes",
+    nonstop: "yes",
+    currencyCode: "USD",
+    region: "USA",
   };
 
   // Make a request to RapidAPI
@@ -275,18 +300,6 @@ app.post("/flights/search", (req, res) => {
       res.status(500).json({ error: "Error fetching flights from Rapid API" });
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 //hotels
 
