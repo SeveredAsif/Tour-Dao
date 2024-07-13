@@ -84,6 +84,30 @@ const initDb = (dbFilePath) => {
         }
       );
 
+
+      db.run(
+        `
+      CREATE TABLE IF NOT EXISTS all_hotels (
+    hotel_id INTEGER ,
+    accessibilityLabel TEXT,
+    name TEXT,
+    latitude REAL,
+    longitude REAL,
+    reviewScore REAL,
+    reviewCount INTEGER,
+    photoUrls TEXT,
+    priceBreakdown TEXT,
+    currency TEXT,
+    countryCode TEXT
+  )
+`,
+        (err) => {
+          if (err) {
+            console.error("Error creating table " + err.message);
+          } 
+        }
+      );
+
     
       
     }

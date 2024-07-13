@@ -379,7 +379,7 @@ const insertHotelData = (hotels) => {
   }
 };
 
-app.post('/hotels/search', (req, res) => {
+/*app.post('/hotels/search', (req, res) => {
   const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination';
   const rapidApiHeaders = {
     'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
@@ -405,7 +405,7 @@ app.post('/hotels/search', (req, res) => {
     const hotels = response.data.data;
 
     // Insert the fetched hotel data into the database
-    /*insertHotelData(hotels);*/
+    //insertHotelData(hotels);
 
     // Respond with the hotels data
     res.json({ hotels });
@@ -414,7 +414,22 @@ app.post('/hotels/search', (req, res) => {
     console.error('Error fetching hotels from Rapid API:', error);
     res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
   });
-});
+});*/
+
+/*app.post('/hotels/search', (req, res) => {
+  const sql = 'SELECT * FROM hotels';
+
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).json({ error: 'Error fetching hotels' });
+    } else {
+      console.log(rows);
+      res.json(rows);
+    }
+  });
+});*/
+
 
 
 app.post('/hotels/search/details', (req, res) => {
