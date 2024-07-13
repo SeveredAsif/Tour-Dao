@@ -17,6 +17,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
     "node-geocoder": "^4.3.0",
     "opencage-api-client": "^1.0.7",
     "sqlite3": "^5.1.7"

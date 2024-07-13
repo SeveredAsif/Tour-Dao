@@ -87,8 +87,9 @@ const initDb = (dbFilePath) => {
 
       db.run(
         `
-      CREATE TABLE IF NOT EXISTS all_hotels (
-    hotel_id INTEGER ,
+     CREATE TABLE IF NOT EXISTS hotels_all (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    hotel_id INTEGER,
     accessibilityLabel TEXT,
     name TEXT,
     latitude REAL,
@@ -99,7 +100,8 @@ const initDb = (dbFilePath) => {
     priceBreakdown TEXT,
     currency TEXT,
     countryCode TEXT
-  )
+);
+
 `,
         (err) => {
           if (err) {

@@ -38,7 +38,7 @@ fs.createReadStream("iata-icao.csv")
   });
 
 app.get("/query", (req, res) => {
-  const sql = "SELECT * FROM flights";
+  const sql = "SELECT * FROM hotels";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -409,183 +409,74 @@ app.post("/flights/searchh", (req, res) => {
 
 
 
-<<<<<<< HEAD
-const insertHotelData = (hotels) => {
-  // Check if 'hotels' is an array
-  if (Array.isArray(hotels)) {
-    hotels.forEach((hotel) => {
-      const {
-        dest_id,
-        search_type,
-        city_ufi,
-        label,
-        dest_type,
-        nr_hotels,
-        latitude,
-        longitude,
-        country,
-        type,
-        city_name,
-        cc1,
-        region,
-        name,
-        lc,
-        image_url,
-        roundtrip
-      } = hotel;
 
-      const sql = `
-        INSERT INTO hotel_destinations (
-          dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
-          latitude, longitude, country, type, city_name, cc1, region,
-          name, lc, image_url, roundtrip
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
 
-      const params = [
-        dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
-        latitude, longitude, country, type, city_name, cc1, region,
-        name, lc, image_url, roundtrip
-      ];
 
-      db.run(sql, params, (err) => {
-        if (err) {
-          console.error('Error inserting hotel data:', err.message);
-        } else {
-          console.log('Hotel data inserted successfully');
-        }
-      });
-    });
-  } else {
-    console.error('Expected an array of hotels but received:', typeof hotels);
-  }
-};
 
-/*app.post('/hotels/search', (req, res) => {
-  const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination';
-=======
-app.post("/hotels/search", (req, res) => {
-  const rapidApiEndpoint =
-    "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination";
->>>>>>> 3c83590d9bdcd874f318e3d77734b34d9bbca308
-  const rapidApiHeaders = {
-    "x-rapidapi-key": "9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824",
-    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
-    'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
-    'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
-  };
 
-  const { destination, checkIn, checkOut, guests } = req.body;
-  req.session.checkIn = checkIn;
-  req.session.checkOut = checkOut;
-  req.session.guests = guests;
 
-  console.log(req.session)
 
-  const params = {
-    query: destination
-  };
 
-  axios
-    .get(rapidApiEndpoint, {
-      headers: rapidApiHeaders,
-      params: params,
+
+
+/*let hotelsData = [];
+
+// Path to your CSV file
+const csvFilePath = 'hotels.csv';
+
+// Read CSV file and parse its data
+fs.createReadStream(csvFilePath)
+    .pipe(csv())
+    .on('data', (row) => {
+        // Assuming row contains: Name, Amenities, Stars, City, Country, Photo, Price, Website
+        hotelsData.push({
+            name: row.Name,
+            amenities: row['*Amenities*'], // Note: Column names are case-sensitive
+            stars: row.Stars,
+            city: row.City,
+            country: row.Country,
+            photo: row.Photo,
+            price: row.Price,
+            website: row.WebSite
+        });
     })
-    .then((response) => {
-      const hotels = response.data.data;
+    .on('end', () => {
+        console.log('CSV file successfully processed.');
+        // Now hotelsData array contains all parsed data from the CSV file
+    
+    })
+    .on('error', (err) => {
+        console.error('Error encountered while processing CSV:', err);
+    });*/
 
-<<<<<<< HEAD
-    // Insert the fetched hotel data into the database
-    //insertHotelData(hotels);
 
-    // Respond with the hotels data
-    res.json({ hotels });
-  })
-  .catch((error) => {
-    console.error('Error fetching hotels from Rapid API:', error);
-    res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
-  });
-});*/
-
-/*app.post('/hotels/search', (req, res) => {
-  const sql = 'SELECT * FROM hotels';
-
+// API endpoint to fetch all hotels data
+app.get("/hotels", (req, res) => {
+  const sql = "SELECT * FROM hotels";
   db.all(sql, [], (err, rows) => {
     if (err) {
-      console.error('Error executing query:', err);
-      res.status(500).json({ error: 'Error fetching hotels' });
-    } else {
-      console.log(rows);
-      res.json(rows);
+      res.status(400).json({ error: err.message });
+      return;
     }
-  });
-});*/
-
-=======
-      // Insert the fetched hotel data into the database
-      /*insertHotelData(hotels);*/
-
-      // Respond with the hotels data
-      res.json({ hotels });
-    })
-    .catch((error) => {
-      console.error("Error fetching hotels from Rapid API:", error);
-      res.status(500).json({ error: "Error fetching hotels from Rapid API" });
+    res.json({
+      data: rows,
     });
+  });
 });
->>>>>>> 3c83590d9bdcd874f318e3d77734b34d9bbca308
-
-app.post("/hotels/search/details", (req, res) => {
-  const rapidApiEndpoint =
-    "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels";
-  const rapidApiHeaders = {
-   'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
-    'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
-  };
 
 
-  const {
-    dest_id,
-    search_type,
-    destination,
-    checkIn,
-    checkOut,
-    guests
-  } = req.body;
-
-  const params = {
-    dest_id: dest_id,
-    search_type: search_type,
-    arrival_date: checkIn,
-    departure_date: checkOut,
-    adults: guests,
-    children_age: '0,17',
-    room_qty: '1',
-    page_number: '1',
-    units: 'metric',
-    temperature_unit: 'c',
-    languagecode: 'en-us',
-    currency_code: 'AED'
-  }
-
-  axios.get(rapidApiEndpoint, {
-    headers: rapidApiHeaders,
-    params: params,
-  })
-  .then((response) => {
-    console.log(response)
-    const hotels = response.data.data;
-
-      // Insert the fetched hotel data into the database
-      /*insertHotelData(hotels);*/
-
-    // Respond with the hotels data
-    
-    res.json({ hotels });
-  })
-  .catch((error) => {
-    console.error('Error fetching hotels from Rapid API:', error);
-    res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
+// API endpoint to fetch all hotels data
+app.get("/hotels/search/details", (req, res) => {
+  const sql = "SELECT * FROM berlin_hotels";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    console.log(rows)
+    res.json({
+      data: rows,
+    });
   });
 });
 
