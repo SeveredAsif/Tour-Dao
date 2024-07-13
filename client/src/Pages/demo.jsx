@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../Components/Navbar';
 import '../css/HotelPage.css';
 import hotelImage from '../pictures/hotel_page.jpg';
@@ -11,20 +11,29 @@ const HotelPage = () => {
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
   const [hotelsData, setHotelsData] = useState(null);
-
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:4000/hotels")
-      .then((response) => {
-        console.log(response.data.data)
-        setHotelsData(response.data.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching hotels data:', error);
-      });
-  }, []);
   
+    const handleHotelClick = (dest_id, search_type) => {
+      // Prepare data to send in the request body
+      const requestData = {
+        dest_id,
+        search_type,
+        destination,
+        checkIn,
+        checkOut,
+        guests
+      };
+  
+      axios.post('http://localhost:4000/hotels/search/details', requestData)
+        .then(response => {
+          console.log('Data sent successfully:', response.data);
+          // Handle response data as needed
+          setHotelsData(response.data.hotels); // Assuming response structure includes hotels
+        })
+        .catch(error => {
+          console.error('Error sending data:', error);
+        });
+    };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,13 +44,13 @@ const HotelPage = () => {
       guests
     };
 
-    /*try {
+    try {
       const response = await axios.post('http://localhost:4000/hotels/search', params);
       console.log('Response:', response.data);
       setHotelsData(response.data);
     } catch (error) {
       console.error('Error fetching hotels:', error);
-    }*/
+    }
   };
 
   return (
@@ -81,32 +90,29 @@ const HotelPage = () => {
             onChange={(e) => setGuests(parseInt(e.target.value))}
             className="search-input"
           />
-          <Link to={`/hotels/search/details`}>
           <button type="submit" className="search-button">
             Search
           </button>
-          </Link>
-         
         </form>
-        {hotelsData && (
-  <div className="hotels-list">
-    <h2>Found Hotels:</h2>
-    <ul>
-      {hotelsData.map((hotel, index) => (
-        <li key={index}>
-          <p>Name: {hotel.name}</p>
-          <p>Country: {hotel.country}</p>
-          <p>Amenities: {hotel.amenities}</p>
-          <Link to={`/hotels/search/details/${hotel.id}`}>
-            <img src={hotel.photo} alt={hotel.name} />
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
 
-
+        {hotelsData && hotelsData.hotels && (
+          <div className="hotels-list">
+            <h2>Found Hotels:</h2>
+            <ul>
+              {hotelsData.hotels.map((hotel, index) => (
+                <li key={index} onClick={() => handleHotelClick(hotel.dest_id, hotel.search_type)}>
+                  <p>Name: {hotel.name}</p>
+                  <p>Country: {hotel.country}</p>
+                  <p>Number of Hotels: {hotel.hotels}</p>
+                  <Link to="/hotels/search/details">
+                  <img src={hotel.image_url} alt={hotel.name} onClick={() => handleHotelClick(hotel.dest_id, hotel.search_type)}/>
+                 </Link>
+                 
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -7,10 +7,9 @@ const HotelDetails = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.post("http://localhost:4000/hotels/search/details")
+    axios.get("http://localhost:4000/hotels/search/details")
       .then((response) => {
-        console.log('Response:', response.data);
-        setHotels(response.data);
+        setHotels(response.data.data);
        
       })
       .catch((error) => {
@@ -27,10 +26,13 @@ const HotelDetails = () => {
         <div className="hotels-list">
           {hotels.map((hotel, index) => (
             <div key={index} className="hotel-card">
-              <img src={hotel.photoUrls[0]} alt={hotel.name} />
+              <img src={hotel.photoUrl} alt={hotel.name} />
               <h3>{hotel.name}</h3>
               <p>{hotel.accessibilityLabel}</p>
-              <p>Price: {hotel.priceBreakdown.currency} {hotel.priceBreakdown.price}</p>
+              <p>Price: {hotel.reviewScore}</p>
+              <button type="submit" className="search-button">
+                 Book Now
+              </button>
             </div>
           ))}
         </div>

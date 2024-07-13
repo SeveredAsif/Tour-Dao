@@ -42,7 +42,7 @@ fs.createReadStream("iata-icao.csv")
   });
 
 app.get("/query", (req, res) => {
-  const sql = "SELECT * FROM destinations";
+  const sql = "SELECT * FROM hotels";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -326,161 +326,77 @@ app.post("/flights/searchh", (req, res) => {
 });
 
 //hotels
-app.post("/hotels/search", (req, res) => {
-  const rapidApiEndpoint =
-    "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination";
-  const rapidApiHeaders = {
-    "x-rapidapi-key": "9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824",
-    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
-    "x-rapidapi-key": "29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913",
-    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
-  };
 
-  const { destination, checkIn, checkOut, guests } = req.body;
-  req.session.checkIn = checkIn;
-  req.session.checkOut = checkOut;
-  req.session.guests = guests;
 
-  console.log(req.session);
 
-  const params = {
-    query: destination,
-  };
 
-  axios
-    .get(rapidApiEndpoint, {
-      headers: rapidApiHeaders,
-      params: params,
+
+
+
+
+
+
+
+
+
+/*let hotelsData = [];
+
+// Path to your CSV file
+const csvFilePath = 'hotels.csv';
+
+// Read CSV file and parse its data
+fs.createReadStream(csvFilePath)
+    .pipe(csv())
+    .on('data', (row) => {
+        // Assuming row contains: Name, Amenities, Stars, City, Country, Photo, Price, Website
+        hotelsData.push({
+            name: row.Name,
+            amenities: row['*Amenities*'], // Note: Column names are case-sensitive
+            stars: row.Stars,
+            city: row.City,
+            country: row.Country,
+            photo: row.Photo,
+            price: row.Price,
+            website: row.WebSite
+        });
     })
-    .then((response) => {
-      const hotels = response.data.data;
-
-      // Insert the fetched hotel data into the database
-      /*insertHotelData(hotels);*/
-
-      // Respond with the hotels data
-      res.json({ hotels });
+    .on('end', () => {
+        console.log('CSV file successfully processed.');
+        // Now hotelsData array contains all parsed data from the CSV file
+    
     })
-    .catch((error) => {
-      console.error("Error fetching hotels from Rapid API:", error);
-      res.status(500).json({ error: "Error fetching hotels from Rapid API" });
+    .on('error', (err) => {
+        console.error('Error encountered while processing CSV:', err);
+    });*/
+
+
+// API endpoint to fetch all hotels data
+app.get("/hotels", (req, res) => {
+  const sql = "SELECT * FROM hotels";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      data: rows,
     });
+  });
 });
 
-app.post("/hotels/search/details", (req, res) => {
-  const rapidApiEndpoint =
-    "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels";
-  const rapidApiHeaders = {
-    "x-rapidapi-key": "29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913",
-    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
-  };
 
-  const { dest_id, search_type, destination, checkIn, checkOut, guests } =
-    req.body;
-
-  const params = {
-    dest_id: dest_id,
-    search_type: search_type,
-    arrival_date: checkIn,
-    departure_date: checkOut,
-    adults: guests,
-    children_age: "0,17",
-    room_qty: "1",
-    page_number: "1",
-    units: "metric",
-    temperature_unit: "c",
-    languagecode: "en-us",
-    currency_code: "AED",
-  };
-
-  axios
-    .get(rapidApiEndpoint, {
-      headers: rapidApiHeaders,
-      params: params,
-    })
-    .then((response) => {
-      console.log(response);
-      const hotels = response.data.data;
-
-      // Insert the fetched hotel data into the database
-      /*insertHotelData(hotels);*/
-
-      // Respond with the hotels data
-
-      res.json({ hotels });
-    })
-    .catch((error) => {
-      console.error("Error fetching hotels from Rapid API:", error);
-      res.status(500).json({ error: "Error fetching hotels from Rapid API" });
+// API endpoint to fetch all hotels data
+app.get("/hotels/search/details", (req, res) => {
+  const sql = "SELECT * FROM berlin_hotels";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    console.log(rows)
+    res.json({
+      data: rows,
     });
-});
-
-//login part endpoints
-app.post("/register", (req, res) => {
-  const { username, password, email } = req.body;
-
-  const sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-  const params = [username, password, email];
-
-  db.run(sql, params, function (err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res
-      .status(201)
-      .json({ message: "User registered successfully", userId: this.lastID });
-  });
-});
-
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) {
-    return res.sendStatus(401);
-  }
-
-  jwt.verify(token, secretKey, (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
-    }
-    req.user = user;
-    next();
-  });
-};
-
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  const sql = "SELECT * FROM users WHERE username = ?";
-  db.get(sql, [username], (err, user) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    if (!user || user.password !== password) {
-      return res.status(400).json({ error: "Invalid username or password" });
-    }
-
-    const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
-    res.json({ message: "Login successful", token });
-  });
-});
-
-app.get("/protected", authenticateToken, (req, res) => {
-  console.log(req.user);
-  res.json({ message: "This is a protected route", user: req.user });
-});
-
-app.post('/book', authenticateToken, (req, res) => {
-  const { flightId } = req.body;
-  const userId = req.user.userId;
-
-  const sql = 'INSERT INTO bookings (userId, flightId) VALUES (?, ?)';
-  db.run(sql, [userId, flightId], function(err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ message: 'Flight booked successfully!' });
   });
 });
 
