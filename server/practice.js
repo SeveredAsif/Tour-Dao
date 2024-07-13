@@ -11,6 +11,7 @@ const port = 4000;
 app.use(express.json());
 app.use(cors()); // Enable CORS
 
+
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
 const db = initDb(dbFilePath);
@@ -167,7 +168,7 @@ app.post("/flights/search", (req, res) => {
   const rapidApiEndpoint =
     "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
   const rapidApiHeaders = {
-    "x-rapidapi-key": "d76dc60036msh0cbf83ab768fa61p17d7dcjsne50e065a42c4",
+    "x-rapidapi-key": "ef609bca72msha460ddd3d4261e7p12b5b7jsn3ef8a8dd62b2",
     "x-rapidapi-host": "tripadvisor16.p.rapidapi.com",
   };
   const {
@@ -191,10 +192,10 @@ app.post("/flights/search", (req, res) => {
     classOfService,
     returnDate: returnDate || undefined,
     pageNumber: 1,
-    nearby: "yes",
-    nonstop: "yes",
-    currencyCode: "USD",
-    region: "USA",
+    nearby: 'yes',
+    nonstop: 'yes',
+    currencyCode: 'USD',
+    region: 'USA',
   };
 
   // Make a request to RapidAPI
@@ -208,7 +209,6 @@ app.post("/flights/search", (req, res) => {
 
       // Insert the fetched flight data into the database
       insertFlightData(flights);
-      console.log("everything ok");
 
       // Respond with the flights data
       res.json({ flights });
@@ -249,10 +249,10 @@ app.post("/flights/search", (req, res) => {
     classOfService,
     returnDate: returnDate || undefined,
     pageNumber: 1,
-    nearby: "yes",
-    nonstop: "yes",
-    currencyCode: "USD",
-    region: "USA",
+    nearby: 'yes',
+    nonstop: 'yes',
+    currencyCode: 'USD',
+    region: 'USA',
   };
 
   // Make a request to RapidAPI
@@ -276,60 +276,72 @@ app.post("/flights/search", (req, res) => {
     });
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
 //hotels
 
 
+// Define endpoint for hotel search
 
+
+// Function to insert hotel data into the database
 const insertHotelData = (hotels) => {
-  // Check if 'hotels' is an array
-  if (Array.isArray(hotels)) {
-    hotels.forEach((hotel) => {
-      const {
-        dest_id,
-        search_type,
-        city_ufi,
-        label,
-        dest_type,
-        nr_hotels,
-        latitude,
-        longitude,
-        country,
-        type,
-        city_name,
-        cc1,
-        region,
-        name,
-        lc,
-        image_url,
-        roundtrip
-      } = hotel;
+  hotels.forEach((hotel) => {
+    const {
+      dest_id,
+      search_type,
+      city_ufi,
+      label,
+      dest_type,
+      nr_hotels,
+      latitude,
+      longitude,
+      country,
+      type,
+      city_name,
+      cc1,
+      region,
+      name,
+      lc,
+      image_url,
+      hotels,
+      roundtrip
+    } = hotel;
 
-      const sql = `
-        INSERT INTO hotel_destinations (
-          dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
-          latitude, longitude, country, type, city_name, cc1, region,
-          name, lc, image_url, roundtrip
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
-
-      const params = [
+    const sql = `
+      INSERT INTO destinations (
         dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
         latitude, longitude, country, type, city_name, cc1, region,
-        name, lc, image_url, roundtrip
-      ];
+        name, lc, image_url, hotels, roundtrip
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-      db.run(sql, params, (err) => {
-        if (err) {
-          console.error('Error inserting hotel data:', err.message);
-        } else {
-          console.log('Hotel data inserted successfully');
-        }
-      });
+    const params = [
+      dest_id, search_type, city_ufi, label, dest_type, nr_hotels,
+      latitude, longitude, country, type, city_name, cc1, region,
+      name, lc, image_url, hotels, roundtrip
+    ];
+
+    db.run(sql, params, (err) => {
+      if (err) {
+        console.error('Error inserting hotel data:', err.message);
+      } else {
+        console.log('Hotel data inserted successfully');
+      }
     });
-  } else {
-    console.error('Expected an array of hotels but received:', typeof hotels);
-  }
+  });
 };
+
 
 app.post('/hotels/search', (req, res) => {
   const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination';
@@ -339,15 +351,10 @@ app.post('/hotels/search', (req, res) => {
   };
 
   const { destination, checkIn, checkOut, guests } = req.body;
-  req.session.checkIn = checkIn;
-  req.session.checkOut = checkOut;
-  req.session.guests = guests;
 
   const params = {
     query: destination,
-    checkin_date: checkIn,
-    checkout_date: checkOut,
-    guests: guests,
+  
   };
 
   axios.get(rapidApiEndpoint, {
@@ -355,10 +362,12 @@ app.post('/hotels/search', (req, res) => {
     params: params,
   })
   .then((response) => {
-    const hotels = response.data.data;
+    const hotels = response.data;
+
+    console.log(hotels)
 
     // Insert the fetched hotel data into the database
-    /*insertHotelData(hotels);*/
+    insertHotelData(hotels);
 
     // Respond with the hotels data
     res.json({ hotels });
@@ -368,55 +377,6 @@ app.post('/hotels/search', (req, res) => {
     res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
   });
 });
-
-
-app.post('/hotels/search/details', (req, res) => {
-  const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels';
-  const rapidApiHeaders = {
-   'x-rapidapi-key': '9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824',
-    'x-rapidapi-host': 'booking-com15.p.rapidapi.com',
-  };
-
-  const { dest_id_user, search_type_user} = req.body;
-
-  const dest_id = req.session.dest_id;
-  const search_type = req.session.search_type;
-
-
-  const params = {
-    dest_id: dest_id_user,
-    search_type: search_type_user,
-    arrival_date: req.session.checkIn,
-    departure_date: req.session.checkOut,
-    adults: req.session.guests,
-    children_age: '0,17',
-    room_qty: '1',
-    page_number: '1',
-    units: 'metric',
-    temperature_unit: 'c',
-    languagecode: 'en-us',
-    currency_code: 'AED'
-  }
-
-  axios.get(rapidApiEndpoint, {
-    headers: rapidApiHeaders,
-    params: params,
-  })
-  .then((response) => {
-    const hotels = response.data.data;
-
-    // Insert the fetched hotel data into the database
-    /*insertHotelData(hotels);*/
-
-    // Respond with the hotels data
-    res.json({ hotels });
-  })
-  .catch((error) => {
-    console.error('Error fetching hotels from Rapid API:', error);
-    res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
-  });
-});
-
 
 
 
