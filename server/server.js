@@ -3,6 +3,7 @@ const sqlite3 = require("sqlite3").verbose();
 const cors = require("cors");
 const axios = require("axios");
 const bodyParser = require("body-parser");
+const session = require('express-session');
 const app = express();
 const initDb = require("./initDb");
 const fs = require("fs");
@@ -12,6 +13,14 @@ const port = 4000;
 // Middleware to parse JSON
 app.use(express.json());
 app.use(cors()); // Enable CORS
+
+// Configure session middleware
+app.use(session({
+  secret: 'my-secret-key', // replace with your own secret key
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // set secure: true if using HTTPS
+}));
 
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
@@ -406,6 +415,8 @@ app.post("/hotels/search", (req, res) => {
   const rapidApiHeaders = {
     "x-rapidapi-key": "9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824",
     "x-rapidapi-host": "booking-com15.p.rapidapi.com",
+    'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
+    'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
   };
 
   const { destination, checkIn, checkOut, guests } = req.body;
@@ -413,11 +424,10 @@ app.post("/hotels/search", (req, res) => {
   req.session.checkOut = checkOut;
   req.session.guests = guests;
 
+  console.log(req.session)
+
   const params = {
-    query: destination,
-    checkin_date: checkIn,
-    checkout_date: checkOut,
-    guests: guests,
+    query: destination
   };
 
   axios
@@ -444,48 +454,54 @@ app.post("/hotels/search/details", (req, res) => {
   const rapidApiEndpoint =
     "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels";
   const rapidApiHeaders = {
-    "x-rapidapi-key": "9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824",
-    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
+   'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
+    'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
   };
 
-  const { dest_id_user, search_type_user } = req.body;
 
-  const dest_id = req.session.dest_id;
-  const search_type = req.session.search_type;
+  const {
+    dest_id,
+    search_type,
+    destination,
+    checkIn,
+    checkOut,
+    guests
+  } = req.body;
 
   const params = {
-    dest_id: dest_id_user,
-    search_type: search_type_user,
-    arrival_date: req.session.checkIn,
-    departure_date: req.session.checkOut,
-    adults: req.session.guests,
-    children_age: "0,17",
-    room_qty: "1",
-    page_number: "1",
-    units: "metric",
-    temperature_unit: "c",
-    languagecode: "en-us",
-    currency_code: "AED",
-  };
+    dest_id: dest_id,
+    search_type: search_type,
+    arrival_date: checkIn,
+    departure_date: checkOut,
+    adults: guests,
+    children_age: '0,17',
+    room_qty: '1',
+    page_number: '1',
+    units: 'metric',
+    temperature_unit: 'c',
+    languagecode: 'en-us',
+    currency_code: 'AED'
+  }
 
-  axios
-    .get(rapidApiEndpoint, {
-      headers: rapidApiHeaders,
-      params: params,
-    })
-    .then((response) => {
-      const hotels = response.data.data;
+  axios.get(rapidApiEndpoint, {
+    headers: rapidApiHeaders,
+    params: params,
+  })
+  .then((response) => {
+    console.log(response)
+    const hotels = response.data.data;
 
       // Insert the fetched hotel data into the database
       /*insertHotelData(hotels);*/
 
-      // Respond with the hotels data
-      res.json({ hotels });
-    })
-    .catch((error) => {
-      console.error("Error fetching hotels from Rapid API:", error);
-      res.status(500).json({ error: "Error fetching hotels from Rapid API" });
-    });
+    // Respond with the hotels data
+    
+    res.json({ hotels });
+  })
+  .catch((error) => {
+    console.error('Error fetching hotels from Rapid API:', error);
+    res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
+  });
 });
 
 // Start the Express server
