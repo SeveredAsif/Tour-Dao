@@ -1,12 +1,12 @@
 import React from "react";
-import FlightPage from "./FlightPage";
+import FlightPage3 from "./FlightPage3";
 import Navbar from "../Components/Navbar";
 
 const App = () => {
   return (
     <div className="App">
       <Navbar />
-      <FlightPage />
+      <FlightPage3 />
     </div>
   );
 };

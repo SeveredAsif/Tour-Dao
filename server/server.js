@@ -5,6 +5,8 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const app = express();
 const initDb = require("./initDb");
+const fs = require('fs');
+const csv = require('csv-parser');
 const port = 4000;
 
 // Middleware to parse JSON
@@ -14,6 +16,29 @@ app.use(cors()); // Enable CORS
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
 const db = initDb(dbFilePath);
+
+
+let airports = [];
+
+fs.createReadStream('iata-icao.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    airports.push(row);
+  })
+  .on('end', () => {
+    console.log('CSV file successfully processed');
+  });
+
+// Endpoint to search for airports
+app.get('/airports/search', (req, res) => {
+  const query = req.query.query.toLowerCase();
+  const results = airports.filter(airport => 
+    airport.iata.toLowerCase().includes(query) || 
+    airport.airport.toLowerCase().includes(query) ||
+    airport.region_name.toLowerCase().includes(query)
+  );
+  res.json(results);
+});
 
 // Route to get all destinations
 app.get("/destinations", (req, res) => {
