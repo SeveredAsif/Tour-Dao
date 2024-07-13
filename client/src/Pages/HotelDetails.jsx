@@ -9,7 +9,6 @@ const HotelDetails = () => {
   useEffect(() => {
     axios.get("http://localhost:4000/hotels/search/details")
       .then((response) => {
-        console.log('Response:', response.data.data);
         setHotels(response.data.data);
        
       })
@@ -31,6 +30,9 @@ const HotelDetails = () => {
               <h3>{hotel.name}</h3>
               <p>{hotel.accessibilityLabel}</p>
               <p>Price: {hotel.reviewScore}</p>
+              <button type="submit" className="search-button">
+                 Book Now
+              </button>
             </div>
           ))}
         </div>
