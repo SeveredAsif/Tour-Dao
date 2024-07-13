@@ -6,8 +6,8 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const app = express();
 const initDb = require("./initDb");
-const fs = require('fs');
-const csv = require('csv-parser');
+const fs = require("fs");
+const csv = require("csv-parser");
 const port = 4000;
 
 // Middleware to parse JSON
@@ -26,32 +26,45 @@ app.use(session({
 const dbFilePath = "./tour.db";
 const db = initDb(dbFilePath);
 
-
 let airports = [];
 
-fs.createReadStream('iata-icao.csv')
+fs.createReadStream("iata-icao.csv")
   .pipe(csv())
-  .on('data', (row) => {
+  .on("data", (row) => {
     airports.push(row);
   })
-  .on('end', () => {
-    console.log('CSV file successfully processed');
+  .on("end", () => {
+    console.log("CSV file successfully processed");
   });
 
+app.get("/query", (req, res) => {
+  const sql = "SELECT * FROM flights";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      rows,
+    });
+  });
+});
+
 // Endpoint to search for airports
-app.get('/airports/search', (req, res) => {
+app.get("/airports/search", (req, res) => {
   const query = req.query.query.toLowerCase();
-  const results = airports.filter(airport => 
-    airport.iata.toLowerCase().includes(query) || 
-    airport.airport.toLowerCase().includes(query) ||
-    airport.region_name.toLowerCase().includes(query)
+  const results = airports.filter(
+    (airport) =>
+      airport.iata.toLowerCase().includes(query) ||
+      airport.airport.toLowerCase().includes(query) ||
+      airport.region_name.toLowerCase().includes(query)
   );
   res.json(results);
 });
 
 // Route to get all destinations
 app.get("/destinations", (req, res) => {
-  const sql = "SELECT * FROM destinations";
+  const sql = "SELECT * FROM flights";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -195,9 +208,91 @@ const insertFlightData = (flights) => {
     });
   });
 };
+const parseDate = (dateString) => {
+  if (!dateString) return null;
+  const parts = dateString.split("-");
+  if (parts.length !== 3) return null; // Invalid format
+  const [year, month, day] = parts.map((part) => parseInt(part, 10));
+  return new Date(year, month - 1, day);
+};
+
+// Route to search for flights from the database
+app.post("/flights/search", (req, res) => {
+  const {
+    from,
+    to,
+    departureDate,
+    returnDate,
+    classOfService,
+    numAdults,
+    numChildren,
+  } = req.body;
+
+  // Validate and parse the departureDate and returnDate
+
+  const departureDateObj = parseDate(departureDate);
+  if (!departureDateObj || isNaN(departureDateObj)) {
+    return res.status(400).json({ error: "Invalid departure date" });
+  }
+  const departureDateISO = departureDateObj.toISOString();
+
+  let returnDateISO;
+  if (returnDate) {
+    const returnDateObj = parseDate(returnDate);
+    if (!returnDateObj || isNaN(returnDateObj)) {
+      return res.status(400).json({ error: "Invalid return date" });
+    }
+    returnDateISO = returnDateObj.toISOString();
+  }
+
+  // Construct the SQL query to search for flights based on the given parameters
+  let sql = `
+    SELECT * FROM flights 
+    WHERE originStationCode = ? 
+      AND destinationStationCode = ? 
+      AND classOfService = ?
+  `;
+
+  const params = [from, to, classOfService];
+
+  // If returnDate is provided, add it to the query
+  // if (returnDateISO) {
+  //   sql += " AND DATE(arrivalDateTime) <= ?";
+  //   params.push(returnDateISO);
+  // }
+
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    const filteredRows = rows.filter((row) => {
+      const rowDepartureDate = new Date(row.departureDateTime)
+        .toISOString()
+        .split("T")[0];
+      //console.log(row.arrivalDateTime);
+      return rowDepartureDate === departureDate;
+    });
+
+    let filter = filteredRows;
+
+    if (returnDate) {
+      filter = rows.filter((row) => {
+        const rowArrivalDate = new Date(row.arrivalDateTime)
+          .toISOString()
+          .split("T")[0];
+        console.log(returnDate +" "+rowArrivalDate+" "+row.arrivalDateTime);
+        return rowArrivalDate === returnDate;
+      });
+    }
+
+    console.log(filter);
+    res.json({ flights: filter });
+  });
+});
 
 // Route to search for flights
-app.post("/flights/search", (req, res) => {
+app.post("/flights/searchh", (req, res) => {
   const rapidApiEndpoint =
     "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
   const rapidApiHeaders = {
@@ -255,79 +350,66 @@ app.post("/flights/search", (req, res) => {
 
 // Function to insert flight data into the database
 // Route to search for flights
-app.post("/flights/search", (req, res) => {
-  const rapidApiEndpoint =
-    "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
-  const rapidApiHeaders = {
-    "x-rapidapi-key": "ef609bca72msha460ddd3d4261e7p12b5b7jsn3ef8a8dd62b2",
-    "x-rapidapi-host": "tripadvisor16.p.rapidapi.com",
-  };
-  const {
-    from,
-    to,
-    departureDate,
-    returnDate,
-    classOfService,
-    numAdults,
-    numChildren,
-  } = req.body;
+// app.post("/flights/search", (req, res) => {
+//   const rapidApiEndpoint =
+//     "https://tripadvisor16.p.rapidapi.com/api/v1/flights/searchFlights";
+//   const rapidApiHeaders = {
+//     "x-rapidapi-key": "ef609bca72msha460ddd3d4261e7p12b5b7jsn3ef8a8dd62b2",
+//     "x-rapidapi-host": "tripadvisor16.p.rapidapi.com",
+//   };
+//   const {
+//     from,
+//     to,
+//     departureDate,
+//     returnDate,
+//     classOfService,
+//     numAdults,
+//     numChildren,
+//   } = req.body;
 
-  const params = {
-    sourceAirportCode: from,
-    destinationAirportCode: to,
-    date: departureDate,
-    itineraryType: returnDate ? "ROUND_TRIP" : "ONE_WAY",
-    sortOrder: "ML_BEST_VALUE",
-    numAdults,
-    numSeniors: 0,
-    classOfService,
-    returnDate: returnDate || undefined,
-    pageNumber: 1,
-    nearby: "yes",
-    nonstop: "yes",
-    currencyCode: "USD",
-    region: "USA",
-  };
+//   const params = {
+//     sourceAirportCode: from,
+//     destinationAirportCode: to,
+//     date: departureDate,
+//     itineraryType: returnDate ? "ROUND_TRIP" : "ONE_WAY",
+//     sortOrder: "ML_BEST_VALUE",
+//     numAdults,
+//     numSeniors: 0,
+//     classOfService,
+//     returnDate: returnDate || undefined,
+//     pageNumber: 1,
+//     nearby: "yes",
+//     nonstop: "yes",
+//     currencyCode: "USD",
+//     region: "USA",
+//   };
 
-  // Make a request to RapidAPI
-  axios
-    .get(rapidApiEndpoint, {
-      headers: rapidApiHeaders,
-      params: params,
-    })
-    .then((response) => {
-      const flights = response.data.data.flights;
+//   // Make a request to RapidAPI
+//   axios
+//     .get(rapidApiEndpoint, {
+//       headers: rapidApiHeaders,
+//       params: params,
+//     })
+//     .then((response) => {
+//       const flights = response.data.data.flights;
 
-      // Insert the fetched flight data into the database
-      insertFlightData(flights);
+//       // Insert the fetched flight data into the database
+//       insertFlightData(flights);
 
-      // Respond with the flights data
-      res.json({ flights });
-    })
-    .catch((error) => {
-      console.error("Error fetching flights from Rapid API:", error);
-      res.status(500).json({ error: "Error fetching flights from Rapid API" });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//       // Respond with the flights data
+//       res.json({ flights });
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching flights from Rapid API:", error);
+//       res.status(500).json({ error: "Error fetching flights from Rapid API" });
+//     });
+// });
 
 //hotels
 
 
 
+<<<<<<< HEAD
 const insertHotelData = (hotels) => {
   // Check if 'hotels' is an array
   if (Array.isArray(hotels)) {
@@ -381,7 +463,14 @@ const insertHotelData = (hotels) => {
 
 /*app.post('/hotels/search', (req, res) => {
   const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination';
+=======
+app.post("/hotels/search", (req, res) => {
+  const rapidApiEndpoint =
+    "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchDestination";
+>>>>>>> 3c83590d9bdcd874f318e3d77734b34d9bbca308
   const rapidApiHeaders = {
+    "x-rapidapi-key": "9339cf7a9amshefe5ad25556e91bp133a8ejsna241101b6824",
+    "x-rapidapi-host": "booking-com15.p.rapidapi.com",
     'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
     'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
   };
@@ -397,13 +486,15 @@ const insertHotelData = (hotels) => {
     query: destination
   };
 
-  axios.get(rapidApiEndpoint, {
-    headers: rapidApiHeaders,
-    params: params,
-  })
-  .then((response) => {
-    const hotels = response.data.data;
+  axios
+    .get(rapidApiEndpoint, {
+      headers: rapidApiHeaders,
+      params: params,
+    })
+    .then((response) => {
+      const hotels = response.data.data;
 
+<<<<<<< HEAD
     // Insert the fetched hotel data into the database
     //insertHotelData(hotels);
 
@@ -430,10 +521,23 @@ const insertHotelData = (hotels) => {
   });
 });*/
 
+=======
+      // Insert the fetched hotel data into the database
+      /*insertHotelData(hotels);*/
 
+      // Respond with the hotels data
+      res.json({ hotels });
+    })
+    .catch((error) => {
+      console.error("Error fetching hotels from Rapid API:", error);
+      res.status(500).json({ error: "Error fetching hotels from Rapid API" });
+    });
+});
+>>>>>>> 3c83590d9bdcd874f318e3d77734b34d9bbca308
 
-app.post('/hotels/search/details', (req, res) => {
-  const rapidApiEndpoint = 'https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels';
+app.post("/hotels/search/details", (req, res) => {
+  const rapidApiEndpoint =
+    "https://booking-com15.p.rapidapi.com/api/v1/hotels/searchHotels";
   const rapidApiHeaders = {
    'x-rapidapi-key': '29f1d01d4amsh1d2dc3fd2105c82p1daf85jsnd41e8362f913',
     'x-rapidapi-host': 'booking-com15.p.rapidapi.com'
@@ -472,8 +576,8 @@ app.post('/hotels/search/details', (req, res) => {
     console.log(response)
     const hotels = response.data.data;
 
-    // Insert the fetched hotel data into the database
-    /*insertHotelData(hotels);*/
+      // Insert the fetched hotel data into the database
+      /*insertHotelData(hotels);*/
 
     // Respond with the hotels data
     
@@ -484,9 +588,6 @@ app.post('/hotels/search/details', (req, res) => {
     res.status(500).json({ error: 'Error fetching hotels from Rapid API' });
   });
 });
-
-
-
 
 // Start the Express server
 app.listen(port, () => {

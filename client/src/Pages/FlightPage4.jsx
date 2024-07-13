@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 import '../css/FlightPage.css';
 
-const FlightPage3 = () => {
+const FlightPage4 = () => {
   const [from, setFrom] = useState('BOM');
   const [to, setTo] = useState('DEL');
   const [departureDate, setDepartureDate] = useState('2024-07-13');
@@ -39,7 +39,7 @@ const FlightPage3 = () => {
       .then(response => {
         setLoading(false);
         console.log(response.data);
-        navigate('/results', { state: { flights: response.data.flights } });
+        navigate('/results2', { state:  response.data  });
       })
       .catch(err => {
         setError('Error fetching flights');
@@ -57,7 +57,6 @@ const FlightPage3 = () => {
       const response = await axios.get('http://localhost:4000/airports/search', {
         params: { query }
       });
-      console.log(response.data)
       setFunction(response.data);
       setShowFunction(true);
     } catch (err) {
@@ -144,4 +143,4 @@ const FlightPage3 = () => {
   );
 };
 
-export default FlightPage3;
+export default FlightPage4;
