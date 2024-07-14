@@ -13,7 +13,8 @@ import ResultsPage2 from "./Pages/ResultsPage2";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DetailFlight from "./Pages/DetailFlight";
 import Login from "./Pages/Login";
-import Registration from "./Pages/Registration"
+import Registration from "./Pages/Registration";
+import Dashboard from "./Pages/Dashboard";
 import { UserProvider } from "./Components/UserContext";
 
 const router = createBrowserRouter([
@@ -64,7 +65,11 @@ const router = createBrowserRouter([
   {
     path: "/hotels/booking/details",
     element: <HotelBooking />,
-  }
+  },
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
 
 ]);
 
