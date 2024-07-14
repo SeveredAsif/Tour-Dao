@@ -6,6 +6,7 @@ import FlightPageApp from "./Pages/FlightPageApp";
 import HotelPage from "./Pages/HotelPage";
 import HotelDetails from "./Pages/HotelDetails";
 import HotelPayment from "./Pages/HotelPayment";
+import HotelBooking from "./Pages/HotelBooking";
 import HomePage from "./Pages/Homepage";
 import ResultsPage from "./Pages/ResultsPage";
 import ResultsPage2 from "./Pages/ResultsPage2";
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/hotels/booking/payment",
     element: <HotelPayment />,
+  },
+  {
+    path: "/hotels/booking/details",
+    element: <HotelBooking />,
   }
 
 ]);

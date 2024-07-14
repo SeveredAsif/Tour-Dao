@@ -3,7 +3,9 @@ import Navbar from '../Components/Navbar';
 import '../css/HotelPage.css';
 import hotelImage from '../pictures/hotel_page.jpg';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
+
+
 
 const HotelPage = () => {
   const [destination, setDestination] = useState('');
@@ -11,6 +13,7 @@ const HotelPage = () => {
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState(1);
   const [hotelsData, setHotelsData] = useState(null);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const HotelPage = () => {
       });
   }, []);
   
-  const handleSubmit = async (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
 
     const params = {
@@ -34,14 +37,31 @@ const HotelPage = () => {
       checkOut,
       guests
     };
+    
+    
+    navigate('/hotels/booking/details', { state: { data: dataToSend } });
 
-    /*try {
-      const response = await axios.post('http://localhost:4000/hotels/search', params);
+    try {
+      const response = await axios.post('http://localhost:4000/hotels/booking/details', params);
       console.log('Response:', response.data);
-      setHotelsData(response.data);
+     
     } catch (error) {
       console.error('Error fetching hotels:', error);
-    }*/
+    }
+  };*/
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Prepare data to send to next route
+    const bookingData = {
+      destination,
+      checkIn,
+      checkOut,
+      guests
+    };
+
+    navigate('/hotels/search/details', { state: bookingData });
   };
 
   return (
@@ -81,8 +101,9 @@ const HotelPage = () => {
             onChange={(e) => setGuests(parseInt(e.target.value))}
             className="search-input"
           />
+
           <Link to={`/hotels/search/details`}>
-          <button type="submit" className="search-button">
+          <button type="submit" className="search-button" onClick={handleSubmit}>
             Search
           </button>
           </Link>
@@ -97,9 +118,8 @@ const HotelPage = () => {
           <p>Name: {hotel.name}</p>
           <p>Country: {hotel.country}</p>
           <p>Amenities: {hotel.amenities}</p>
-          <Link to={`/hotels/search/details/${hotel.id}`}>
-            <img src={hotel.photo} alt={hotel.name} />
-          </Link>
+          <img src={hotel.photo} alt={hotel.name} />
+          
         </li>
       ))}
     </ul>
