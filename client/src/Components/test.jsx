@@ -1,33 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css';
+import React,{useContext} from 'react';
+import Navbar from '../Components/Navbar';
+import { UserContext } from '../Components/UserContext';
 
-const Navbar = () => {
+import './HomePage.css';
+
+const HomePage = () => {
+  const { username } = useContext(UserContext);
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">Tour De</Link>
-        
-        <ul className="nav-menu">
-          <li className="nav-item">
-            <Link to="/home" className="nav-links">Home</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/destinations" className="nav-links">Destinations</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/flights" className="nav-links">Flights</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/hotels" className="nav-links">Hotels</Link>
-          </li>
-          <li className="nav-item">
-            <Link to="/dashboard" className="nav-links">My Bookings</Link>
-          </li>
-        </ul>
+    <div>
+      <Navbar />
+      <div className="home-container">
+        <h1>Welcome to TravelSite {username}</h1>
+        <p>Discover amazing destinations and book your flights with ease.</p>
       </div>
-    </nav>
+    </div>
   );
 };
 
-export default Navbar;
+export default HomePage;

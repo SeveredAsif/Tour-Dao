@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import insta from '../pictures/insta.png';
+import facebook from '../pictures/facebook.png';
 import logo from '../pictures/logo.png';
 import './Navbar.css'; // Make sure to adjust the path as per your project structure
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
@@ -68,6 +70,15 @@ const Navbar = () => {
             </li>
           </ul>
         </div>
+
+        <div className="icon-wrapper-logo">
+        <img src={insta} alt={'Tour DE'} />
+        </div>
+
+        <div className="icon-wrapper-logo">
+        <img src={facebook} alt={'Tour DE'} />
+        </div>
+
       </div>
     </nav>
   );

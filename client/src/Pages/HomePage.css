@@ -57,3 +57,15 @@ body, h1, p, ul {
     background-color: #f39c12;
   }
   
+
+  .image-container {
+    width: 1500px;  /* Adjust width as needed */
+    height: 420px; /* Adjust height as needed */
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This ensures the image covers the entire div */
+  }
