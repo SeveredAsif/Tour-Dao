@@ -56,3 +56,22 @@
     border-bottom: 3px solid #f39c12;
   }
   
+
+  .icon-wrapper {
+    display: inline-block; /* Ensures the wrapper respects its contents */
+    width: 24px; /* Adjust width as needed */
+    height: 24px; /* Adjust height as needed */
+  }
+  
+  .icon-wrapper svg {
+    width: 100%; /* Make the SVG element fill its container */
+    height: 100%; /* Make the SVG element fill its container */
+    stroke-width: 1; /* Adjust stroke width if necessary */
+  }
+
+  .icon-wrapper-logo {
+    display: inline-block; /* Ensures the wrapper respects its contents */
+    width: 35px; /* Adjust width as needed */
+    height: 35px; /* Adjust height as needed */
+  }
+  
