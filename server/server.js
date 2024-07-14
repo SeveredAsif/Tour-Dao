@@ -492,6 +492,39 @@ app.post('/book', (req, res) => {
   });
 });
 
+app.get('/bookings/:username', (req, res) => {
+  const { username } = req.params;
+
+  // Get user ID from the username
+  const getUserSql = 'SELECT id FROM users WHERE username = ?';
+  db.get(getUserSql, [username], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userId = row.id;
+
+    // Query to get all bookings for the user with flight details
+    const getBookingsSql = `
+      SELECT bookings.id AS bookingId, flights.*, bookings.status
+      FROM bookings
+      JOIN flights ON bookings.flightId = flights.id
+      WHERE bookings.userId = ?
+    `;
+
+    db.all(getBookingsSql, [userId], (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
+    });
+  });
+});
+
+
 // Start the Express server
 app.listen(port, () => {
   console.log(`Server running on port ${port}!`);
