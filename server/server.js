@@ -414,6 +414,7 @@ app.post('/hotels/booking/information', async (req, res) => {
   `;
 
   const values = [userId, destination, checkIn, checkOut, guests, hotelName, price];
+  console.log("maybe im here");
 
   db.run(query, values, function(err) {
     if (err) {
@@ -539,37 +540,73 @@ app.post('/book', (req, res) => {
   });
 });
 
-app.get('/bookings/:username', (req, res) => {
-  const { username } = req.params;
+// app.get('/bookings/:username', (req, res) => {
+//   const { username } = req.params;
 
-  // Get user ID from the username
-  const getUserSql = 'SELECT id FROM users WHERE username = ?';
-  db.get(getUserSql, [username], (err, row) => {
+//   // Get user ID from the username
+//   const getUserSql = 'SELECT id FROM users WHERE username = ?';
+//   db.get(getUserSql, [username], (err, row) => {
+//     if (err) {
+//       return res.status(500).json({ error: err.message });
+//     }
+//     if (!row) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     const userId = row.id;
+
+//     // Query to get all bookings for the user with flight details
+//     const getBookingsSql = `
+//       SELECT bookings.id AS bookingId, flights.*, bookings.status
+//       FROM bookings
+//       JOIN flights ON bookings.flightId = flights.id
+//       WHERE bookings.userId = ?
+//     `;
+
+//     db.all(getBookingsSql, [userId], (err, rows) => {
+//       if (err) {
+//         return res.status(500).json({ error: err.message });
+//       }
+//       res.json(rows);
+//     });
+//   });
+// });
+
+// Get flight bookings by username
+app.get('/bookings/flights/:username', (req, res) => {
+  const { username } = req.params;
+  const sql = `
+    SELECT flights.*, bookings.status
+    FROM bookings
+    JOIN flights ON bookings.flightId = flights.id
+    JOIN users ON bookings.userId = users.id
+    WHERE users.username = ?
+  `;
+  db.all(sql, [username], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (!row) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const userId = row.id;
-
-    // Query to get all bookings for the user with flight details
-    const getBookingsSql = `
-      SELECT bookings.id AS bookingId, flights.*, bookings.status
-      FROM bookings
-      JOIN flights ON bookings.flightId = flights.id
-      WHERE bookings.userId = ?
-    `;
-
-    db.all(getBookingsSql, [userId], (err, rows) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json(rows);
-    });
+    res.json(rows);
   });
 });
+
+// Get hotel bookings by username
+app.get('/bookings/hotels/:username', (req, res) => {
+  const { username } = req.params;
+  const sql = `
+    SELECT hotel_bookings.*
+    FROM hotel_bookings
+    JOIN users ON hotel_bookings.userId = users.id
+    WHERE users.username = ?
+  `;
+  db.all(sql, [username], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+  });
+});
+
 
 
 // Start the Express server
