@@ -1,11 +1,11 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, {  useEffect,useContext } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
 import { UserContext } from '../Components/UserContext';
 
 const HotelBooking = () => {
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
   const location = useLocation();
   const { fullBookingData } = location.state || {};
   const { username } = useContext(UserContext); // Access the username from the context
@@ -28,7 +28,7 @@ const HotelBooking = () => {
       console.log('Success:', response.data);
     } catch (error) {
       console.error('Error:', error);
-      setError(error.message);
+      //setError(error.message);
     }
   };
 
