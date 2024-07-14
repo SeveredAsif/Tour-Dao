@@ -38,8 +38,6 @@ const HotelPage = () => {
       guests
     };
     
-    
-    navigate('/hotels/booking/details', { state: { data: dataToSend } });
 
     try {
       const response = await axios.post('http://localhost:4000/hotels/booking/details', params);
