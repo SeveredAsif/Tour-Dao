@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const HotelDetails = () => {
   const [hotels, setHotels] = useState([]);
@@ -11,7 +11,6 @@ const HotelDetails = () => {
 
   const location = useLocation();
   const bookingData = location.state;
-  //const { destination, checkIn, checkOut, guests } = bookingData;
 
   // Function to generate random number for a hotel
   const generateRandomNumber = (hotelName) => {
@@ -48,7 +47,7 @@ const HotelDetails = () => {
     console.log('Full Booking Data:', fullBookingData);
 
     // Navigate to next route with state
-    navigate('/hotels/booking/details', { state: {fullBookingData} });
+    navigate('/hotels/booking/details', { state: { fullBookingData } });
   };
 
   // Fetch hotels data on component mount
@@ -76,7 +75,6 @@ const HotelDetails = () => {
               <p>{hotel.accessibilityLabel}</p>
               <p>Review: {hotel.reviewScore}</p>
               <p>Price: ${generateRandomNumber(hotel.name)}</p>
-              <Link to={`/hotels/booking/details`}>
               <button
                 type="button" // Ensure type is "button" if it doesn't submit a form
                 className="search-button"
@@ -84,9 +82,6 @@ const HotelDetails = () => {
               >
                 Book Now
               </button>
-              </Link>
-            
-
             </div>
           ))}
         </div>

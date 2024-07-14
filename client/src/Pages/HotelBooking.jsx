@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 const HotelBooking = () => {
@@ -17,6 +16,19 @@ const HotelBooking = () => {
     <div className="hotel-page">
       <Navbar />
       {/* Render components based on fullBookingData */}
+      {fullBookingData ? (
+        <div>
+          <h2>Booking Details</h2>
+          <p>Destination: {fullBookingData.destination}</p>
+          <p>Check-In: {fullBookingData.checkIn}</p>
+          <p>Check-Out: {fullBookingData.checkOut}</p>
+          <p>Guests: {fullBookingData.guests}</p>
+          <p>Hotel Name: {fullBookingData.hotelName}</p>
+          <p>Price: ${fullBookingData.price}</p>
+        </div>
+      ) : (
+        <p>No booking data available.</p>
+      )}
     </div>
   );
 };
