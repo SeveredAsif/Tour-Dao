@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
+import { UserContext } from '../Components/UserContext';
 
 const HotelBooking = () => {
   const [error, setError] = useState(null);
   const location = useLocation();
   const { fullBookingData } = location.state || {};
+  const { username } = useContext(UserContext); // Access the username from the context
 
   useEffect(() => {
     console.log('Full Booking Data:', fullBookingData);
@@ -15,7 +17,14 @@ const HotelBooking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/hotels/booking/information', fullBookingData);
+      const dataToSend = {
+        ...fullBookingData,
+        username // Assuming username is a string obtained from context
+      };
+      
+      /*const response = await axios.post('http://localhost:4000/hotels/booking/information', fullBookingData);*/
+      const response = await axios.post('http://localhost:4000/hotels/booking/information', dataToSend);
+
       console.log('Success:', response.data);
     } catch (error) {
       console.error('Error:', error);

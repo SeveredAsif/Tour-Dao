@@ -42,7 +42,7 @@ fs.createReadStream("iata-icao.csv")
   });
 
 app.get("/query", (req, res) => {
-  const sql = "SELECT * FROM bookings";
+  const sql = "SELECT * FROM hotel_bookings";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -401,10 +401,11 @@ app.get("/hotels/search/details", (req, res) => {
 });
 
 
-app.post('/hotels/booking/information', async (req, res) => {
+/*app.post('/hotels/booking/information', async (req, res) => {
   const bookingData = req.body;
-  const { destination, checkIn, checkOut, guests, hotelName, price } = bookingData;
-  
+  const { destination, checkIn, checkOut, guests, hotelName, price} = bookingData;
+
+
    // input from user
   const userId = 1; // Assuming you have a way to get the userId, here it's hardcoded
 
@@ -423,7 +424,7 @@ app.post('/hotels/booking/information', async (req, res) => {
       res.status(200).json({ message: 'Booking data received successfully', booking: { id: this.lastID, ...bookingData, userId } });
     }
   });
-});
+});*/
 
 
 app.get("/hotels/booking/information", (req, res) => {
@@ -440,6 +441,53 @@ app.get("/hotels/booking/information", (req, res) => {
   });
 });
 
+
+
+// Endpoint to handle hotel booking information
+app.post('/hotels/booking/information', async (req, res) => {
+  const bookingData = req.body;
+  const { destination, checkIn, checkOut, guests, hotelName, price, username } = bookingData;
+  console.log(bookingData)
+
+  // Check if all required fields are present
+  if (!destination || !checkIn || !checkOut || !guests || !hotelName || !price || !username) {
+    return res.status(400).json({ error: 'Missing required fields in booking data' });
+  }
+
+  // Assuming you have a SQL query to retrieve the user ID based on username
+  const getUserSql = 'SELECT id FROM users WHERE username = ?';
+
+  // Retrieve user ID from the database
+  db.get(getUserSql, [username], (err, row) => {
+    if (err) {
+      console.error('Error retrieving user:', err.message);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userId = row.id;
+
+    // Insert booking data into the database
+    const insertQuery = `
+      INSERT INTO hotel_bookings (userId, destination, checkIn, checkOut, guests, hotelName, price)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    
+    const values = [userId, destination, checkIn, checkOut, guests, hotelName, price];
+
+    db.run(insertQuery, values, function(err) {
+      if (err) {
+        console.error('Error inserting booking data:', err.message);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      // Return success response with inserted booking data
+      res.status(200).json({ message: 'Booking data received successfully', booking: { id: this.lastID, ...bookingData, userId } });
+    });
+  });
+});
 
 
 
