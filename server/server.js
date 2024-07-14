@@ -400,6 +400,53 @@ app.get("/hotels/search/details", (req, res) => {
   });
 });
 
+
+app.post('/hotels/booking/information', async (req, res) => {
+  const bookingData = req.body;
+  const { destination, checkIn, checkOut, guests, hotelName, price } = bookingData;
+  
+   // input from user
+  const userId = 1; // Assuming you have a way to get the userId, here it's hardcoded
+
+  const query = `
+    INSERT INTO hotel_bookings (userId, destination, checkIn, checkOut, guests, hotelName, price)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const values = [userId, destination, checkIn, checkOut, guests, hotelName, price];
+
+  db.run(query, values, function(err) {
+    if (err) {
+      console.error('Error inserting booking data:', err.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.status(200).json({ message: 'Booking data received successfully', booking: { id: this.lastID, ...bookingData, userId } });
+    }
+  });
+});
+
+
+app.get("/hotels/booking/information", (req, res) => {
+  const sql = "SELECT * FROM hotel_bookings";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+   
+    res.json({
+      data: rows,
+    });
+  });
+});
+
+
+
+
+
+
+
+
 //login
 
 app.post("/register", (req, res) => {
