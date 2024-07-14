@@ -1,10 +1,11 @@
 .results-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+  margin-top: 10px; /* Adjust margin-top as needed */
+}
   
   .flight-box {
     border: 1px solid #ccc;
@@ -40,5 +41,12 @@
   
   .detail-button:hover {
     background-color: #0056b3;
+  }
+
+  .no-flights-message {
+    font-size: 1.5em;
+    color: #777;
+    text-align: center;
+    margin-top: 50px;
   }
   

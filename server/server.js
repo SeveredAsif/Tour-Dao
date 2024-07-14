@@ -41,18 +41,19 @@ fs.createReadStream("iata-icao.csv")
     console.log("CSV file successfully processed");
   });
 
-app.get("/query", (req, res) => {
-  const sql = "SELECT * FROM hotel_bookings";
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-    res.json({
-      rows,
+  app.get("/query", (req, res) => {
+    const sql = "SELECT * FROM destinations";
+    db.all(sql,(err, rows) => {
+      if (err) {
+        res.status(400).json({ error: err.message });
+        return;
+      }
+      res.json({
+        rows,
+      });
     });
   });
-});
+  
 
 // Endpoint to search for airports
 app.get("/airports/search", (req, res) => {
