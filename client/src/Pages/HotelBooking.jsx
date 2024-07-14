@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
-import { useLocation } from 'react-router-dom';
+import { Link,useLocation } from 'react-router-dom';
 
 const HotelBooking = () => {
   const [error, setError] = useState(null);
@@ -25,6 +25,11 @@ const HotelBooking = () => {
           <p>Guests: {fullBookingData.guests}</p>
           <p>Hotel Name: {fullBookingData.hotelName}</p>
           <p>Price: ${fullBookingData.price}</p>
+          <Link to={`/hotels/booking/payment`}>
+          <button type="submit" className="search-button">
+            Proceed to payment
+          </button>
+          </Link>
         </div>
       ) : (
         <p>No booking data available.</p>

@@ -113,6 +113,8 @@ const HotelPayment = () => {
           </div>
           <button type="submit">Submit Card Payment</button>
         </form>
+
+        
       )}
 
       {selectedOption === 'digital' && (

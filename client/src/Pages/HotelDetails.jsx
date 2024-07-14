@@ -82,6 +82,7 @@ const HotelDetails = () => {
               >
                 Book Now
               </button>
+              
             </div>
           ))}
         </div>
