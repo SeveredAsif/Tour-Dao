@@ -12,6 +12,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DetailFlight from "./Pages/DetailFlight";
 import Login from "./Pages/Login";
 import Registration from "./Pages/Registration"
+import { UserProvider } from "./Components/UserContext";
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    <UserProvider>
     <RouterProvider router={router} />
+    </UserProvider>
   </React.StrictMode>
 );
 

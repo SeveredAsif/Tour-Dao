@@ -42,7 +42,7 @@ fs.createReadStream("iata-icao.csv")
   });
 
 app.get("/query", (req, res) => {
-  const sql = "SELECT * FROM hotels";
+  const sql = "SELECT * FROM bookings";
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -396,6 +396,98 @@ app.get("/hotels/search/details", (req, res) => {
     console.log(rows)
     res.json({
       data: rows,
+    });
+  });
+});
+
+//login
+
+app.post("/register", (req, res) => {
+  const { username, password, email } = req.body;
+
+  const sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
+  const params = [username, password, email];
+
+  db.run(sql, params, function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res
+      .status(201)
+      .json({ message: "User registered successfully", userId: this.lastID });
+  });
+});
+
+// const authenticateToken = (req, res, next) => {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
+
+//   if (!token) {
+//     return res.sendStatus(401);
+//   }
+
+//   jwt.verify(token, secretKey, (err, user) => {
+//     if (err) {
+//       return res.sendStatus(403);
+//     }
+//     req.user = user;
+//     next();
+//   });
+// };
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  const sql = "SELECT * FROM users WHERE username = ?";
+  db.get(sql, [username], (err, user) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!user || user.password !== password) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    }
+
+    const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
+    res.json({ message: "Login successful", token, id:`${user.id}` });
+  });
+});
+
+// app.get("/protected", (req, res) => {
+//   console.log(req.user);
+//   res.json({ message: "This is a protected route", user: req.user });
+// });
+
+// Endpoint to book a flight
+app.post('/book', (req, res) => {
+  const { username, flight, paymentMethod, paymentDetails } = req.body;
+
+  if (!paymentMethod || !paymentDetails) {
+    return res.status(400).json({ error: 'Payment method and details are required' });
+  }
+
+  const flightId = flight.id; // Extract flight ID from the flight object
+
+  console.log("Booking request received:", username, flightId);
+
+  // Get the userId from the username
+  const getUserSql = 'SELECT id FROM users WHERE username = ?';
+  db.get(getUserSql, [username], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const userId = row.id;
+
+    // Insert the booking into the bookings table
+    const insertBookingSql = 'INSERT INTO bookings (userId, flightId) VALUES (?, ?)';
+    db.run(insertBookingSql, [userId, flightId], function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: 'Flight booked successfully!' });
     });
   });
 });

@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+// Login.jsx
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../Components/UserContext'; // Import the context
 import '../css/Login.css'; // Import CSS file for styling
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { username, setUsername } = useContext(UserContext); // Use context to get and set the username
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:4000/login', { username, password });
+      console.log(response);
       localStorage.setItem('token', response.data.token);
       alert(response.data.message);
-      navigate('/home'); // Redirect to home or other page after login
+      navigate('/home');
     } catch (error) {
       alert(error.response.data.error);
     }
@@ -42,6 +46,7 @@ const Login = () => {
         />
         <button type="submit" className="login-button">Login</button>
       </form>
+      <Link to="/" >Registration</Link>
     </div>
   );
 };
