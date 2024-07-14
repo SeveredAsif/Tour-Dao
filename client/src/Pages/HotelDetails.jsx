@@ -6,16 +6,20 @@ const HotelDetails = () => {
   const [hotels, setHotels] = useState([]);
   const [error, setError] = useState(null);
 
+  const generateRandomNumber = () => {
+    return Math.floor(Math.random() * (200 - 100 + 1)) + 100;
+  };
+
   useEffect(() => {
     axios.get("http://localhost:4000/hotels/search/details")
       .then((response) => {
         setHotels(response.data.data);
-       
+
       })
       .catch((error) => {
         setError(error); // Handle axios error
       });
-  }, []);
+  },[]);
 
   return (
     <div className="hotel-page">
@@ -29,7 +33,8 @@ const HotelDetails = () => {
               <img src={hotel.photoUrl} alt={hotel.name} />
               <h3>{hotel.name}</h3>
               <p>{hotel.accessibilityLabel}</p>
-              <p>Price: {hotel.reviewScore}</p>
+              <p>Review: {hotel.reviewScore}</p>
+              <p>Price: ${generateRandomNumber()}</p>
               <button type="submit" className="search-button">
                  Book Now
               </button>
