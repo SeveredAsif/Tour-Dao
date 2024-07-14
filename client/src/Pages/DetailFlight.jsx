@@ -1,22 +1,47 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import '../css/DetailFlight.css';
 import axios from "axios";
+import { UserContext } from '../Components/UserContext'; // Import the UserContext
 
 const DetailFlight = () => {
   const location = useLocation();
   const { flight } = location.state;
-  console.log(flight);
+  const { username } = useContext(UserContext); // Access the username from the context
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [paymentDetails, setPaymentDetails] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleBookClick = () => {
-    // Get the token from localStorage (assuming it's stored there after login)
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSubmit = (e) => {
+    e.preventDefault();
+
+    if (!paymentMethod || !paymentDetails) {
+      setErrorMessage('Please provide payment method and details');
+      return;
+    }
+
     axios
-      .get("http://localhost:4000/protected")
+      .post("http://localhost:4000/book", {
+        username, // Include the username in the request body
+        flight,
+        paymentMethod,
+        paymentDetails
+      })
       .then((response) => {
-        console.log(response)
+        console.log(response.data);
+        alert("Booking successful!");
+        setShowPaymentModal(false);
       })
       .catch((error) => {
         console.log(error);
+        alert("Error booking flight.");
       });
   };
 
@@ -42,6 +67,36 @@ const DetailFlight = () => {
           Book Ticket
         </button>
       </div>
+
+      {showPaymentModal && (
+        <div className="payment-modal">
+          <div className="payment-modal-content">
+            <h2>Payment Details</h2>
+            <form onSubmit={handlePaymentSubmit}>
+              <label>
+                Payment Method:
+                <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                  <option value="">Select a payment method</option>
+                  <option value="card">Card</option>
+                  <option value="mobile">Mobile</option>
+                </select>
+              </label>
+              <label>
+                Payment Details:
+                <input
+                  type="text"
+                  value={paymentDetails}
+                  onChange={(e) => setPaymentDetails(e.target.value)}
+                  required
+                />
+              </label>
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
+              <button type="submit">Submit Payment</button>
+            </form>
+            <button className="cancel-button" onClick={() => setShowPaymentModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
