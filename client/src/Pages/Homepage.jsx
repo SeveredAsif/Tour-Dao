@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link} from 'react-router-dom';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import { UserContext } from '../Components/UserContext';
@@ -11,6 +12,7 @@ import p3 from '../pictures/3.jpg';
 import ind from '../pictures/in.jpg';
 import m from '../pictures/m.jpg';
 import a from '../pictures/a.jpg';
+import travel from '../pictures/travel1.jpg';
 
 const HomePage = () => {
   const { username } = useContext(UserContext);
@@ -19,7 +21,7 @@ const HomePage = () => {
     <div>
       <Navbar />
       <div className="home-container">
-        <h1>Welcome to TravelSite {username}</h1>
+        <h1 classname="playwrite-cu">Tour De {username}</h1>
         <p>Discover amazing Destinations,best Hotel offers and Book your flights with ease.</p>
 
 <div class="input-group">
@@ -104,7 +106,28 @@ const HomePage = () => {
     </div>
 
 
-
+    <div className="container-fluid blue-container blue-background py-5">
+      <div className="row">
+        <div className="col-md-6">
+          <img src={travel} className="img-fluid rounded" alt="Left Image" />
+        </div>
+        <div className="col-md-6 d-flex align-items-center">
+          <div className="p-5">
+            <h2>It’s easier than ever to go together</h2>
+            <p>Travel is better when you can share it with your best friend. Find all the tips, guides, and tools you need to take a dream trip with your dog.</p>
+            <div class="d-grid gap-2 d-md-block">
+      <Link to="/login">
+      <button class="btn btn-outline-warning button-gap" type="button">Login</button>
+      </Link> 
+      <Link to="/register">
+      <button class="btn btn-outline-warning" type="button">Register</button>
+      </Link>        
+         
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
    <Footer/>
