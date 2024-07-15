@@ -152,7 +152,7 @@ const HotelPayment = () => {
 
   
   <div className="col-12 mt-3 mb-3 text-center">
-        <button className="btn btn-primary" type="submit" onClick={handlePaymentSubmit}>
+        <button className="btn btn-outline-warning" type="submit" onClick={handlePaymentSubmit}>
           Submit Card Payment
         </button>
       </div>
@@ -160,11 +160,7 @@ const HotelPayment = () => {
       <Modal show={showModal} handleClose={handleCloseModal} message="Payment Successful" />
 
 </form>)
-      
-      
-      
-      
-      
+           
       
       
       }

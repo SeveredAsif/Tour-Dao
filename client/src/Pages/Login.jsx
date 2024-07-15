@@ -29,7 +29,7 @@ const Login = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     if (modalMessage.includes('successful')) {
-      navigate('/home');
+      navigate('/');
     }
   };
 
