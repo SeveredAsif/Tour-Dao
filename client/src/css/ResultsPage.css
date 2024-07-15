@@ -1,52 +1,104 @@
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #8e44ad;
+  --accent-color: #ecf0f1;
+  --button-color: #3498db;
+  --button-hover-color: #2980b9;
+  --font-family: 'Merriweather', serif;
+  --header-font-family: 'Playfair Display', serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+}
+
+.results-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .results-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
   padding: 20px;
-  margin-top: 10px; /* Adjust margin-top as needed */
+  flex: 1;
 }
-  
-  .flight-box {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    background-color: #f9f9f9;
-  }
-  
-  .flight-box:hover {
-    transform: translateY(-5px);
-  }
-  
-  .flight-details {
-    margin-bottom: 10px;
-  }
-  
-  .flight-details p {
-    margin: 5px 0;
-  }
-  
-  .detail-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .detail-button:hover {
-    background-color: #0056b3;
-  }
 
-  .no-flights-message {
-    font-size: 1.5em;
-    color: #777;
-    text-align: center;
-    margin-top: 50px;
-  }
-  
+.flight-box {
+  border: 1px solid var(--secondary-color);
+  border-radius: 15px;
+  padding: 20px;
+  width: 320px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  background-color: var(--accent-color);
+}
+
+.flight-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.flight-details {
+  margin-bottom: 20px;
+}
+
+.flight-details p {
+  margin: 8px 0;
+  font-size: 1.1em;
+}
+
+.detail-button {
+  background-color: var(--button-color);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1em;
+}
+
+.detail-button:hover {
+  background-color: var(--button-hover-color);
+}
+
+.no-flights-message {
+  font-size: 1.5em;
+  color: var(--secondary-color);
+  text-align: center;
+  margin-top: 50px;
+}
+
+.promo-section {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.promo-image {
+  max-width: 80%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.promo-text {
+  font-size: 2.5em;
+  color: var(--primary-color);
+  margin-top: 20px;
+  font-family: var(--header-font-family);
+  font-weight: bold;
+}
+
+.footer {
+  background-color: var(--primary-color);
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid var(--secondary-color);
+  color: var(--accent-color);
+}
