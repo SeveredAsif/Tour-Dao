@@ -1,0 +1,36 @@
+.card-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 50vh; /* Example: Adjust container height as needed */
+  }
+  
+  .card-image {
+    width: 200px; /* Adjust width as needed */
+    height: 100; /* Maintain aspect ratio */
+  }
+
+  .container-with-border {
+    border: 2px solid #cfe2f3; /* Light blue border color */
+    padding: 10px; /* Add padding inside the container */
+    border-radius: 5px; /* Optional: Add border radius for rounded corners */
+  }
+
+
+  .form-check-input {
+    margin-right: 10px; /* Adjust spacing between radio button and label */
+  }
+  
+  .form-check-label {
+    margin-right: 20px; /* Adjust spacing between labels */
+  }
+  
+  hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #ccc; /* Gray border color for hr */
+  }
+  
+  
+  

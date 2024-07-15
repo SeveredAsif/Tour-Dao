@@ -1,5 +1,5 @@
 /* Reset some default styles */
-body, h1, p, ul {
+body,p, ul {
     margin: 0;
     padding: 0;
   }
@@ -85,4 +85,37 @@ body, h1, p, ul {
   .my-4 {
     margin-top: 1.5rem !important;
     margin-bottom: 1.5rem !important;
+  }
+
+
+  .blue-background {
+    background-color: #e9f1fb; /* Slight blue background color */
+  }
+  
+  /* Adjust padding as needed */
+  .p-5 {
+    padding: 2rem;
+  }
+
+  .blue-container {
+    max-width: 1200px; /* Adjust maximum width as per your requirement */
+    margin: 5rem auto; /* Center align the container and add 5 rem margin on top and bottom */
+    margin-top: 3rem; /* Add 3 rem margin above the container */
+  }
+  
+  .img-fluid {
+    max-width: 100%; /* Ensure the image scales within its container */
+    height: auto; /* Maintain image aspect ratio */
+  }
+
+  .button-gap {
+    margin: 2rem 
+  }
+  
+
+  .playwrite-cu {
+    font-family: "Playwrite CU", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400; /* Adjust weight as needed */
+    font-style: normal;
   }
