@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 import '../css/FlightPage.css';
-import { FaPlaneDeparture, FaPlaneArrival, FaCalendarAlt, FaUsers, FaChild, FaSearch } from 'react-icons/fa';
+import { FaPlane, FaGlobe, FaUsers, FaTicketAlt } from 'react-icons/fa';
 
 const FlightPage4 = () => {
   const [from, setFrom] = useState('BOM');
@@ -40,7 +40,7 @@ const FlightPage4 = () => {
       .then(response => {
         setLoading(false);
         console.log(response.data);
-        navigate('/results2', { state: response.data });
+        navigate('/results2', { state:  response.data  });
       })
       .catch(err => {
         setError('Error fetching flights');
@@ -83,10 +83,12 @@ const FlightPage4 = () => {
 
   return (
     <div className="flight-page">
-      <h1>Search for Flights</h1>
+      <div className="hero-section">
+        <h1>Find Your Perfect Flight</h1>
+        <p>Book your next adventure with us. Best prices guaranteed!</p>
+      </div>
       <form onSubmit={handleSubmit} className="flight-form">
         <label>
-          <FaPlaneDeparture className="input-icon" />
           From:
           <input type="text" value={from} onChange={handleFromChange} />
           {showFromSuggestions && fromSuggestions.length > 0 && (
@@ -100,7 +102,6 @@ const FlightPage4 = () => {
           )}
         </label>
         <label>
-          <FaPlaneArrival className="input-icon" />
           To:
           <input type="text" value={to} onChange={handleToChange} />
           {showToSuggestions && toSuggestions.length > 0 && (
@@ -114,12 +115,10 @@ const FlightPage4 = () => {
           )}
         </label>
         <label>
-          <FaCalendarAlt className="input-icon" />
           Departure Date:
           <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} />
         </label>
         <label>
-          <FaCalendarAlt className="input-icon" />
           Return Date:
           <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
         </label>
@@ -132,22 +131,48 @@ const FlightPage4 = () => {
           </select>
         </label>
         <label>
-          <FaUsers className="input-icon" />
           Adults:
           <input type="number" value={adults} onChange={(e) => setAdults(Number(e.target.value))} />
         </label>
         <label>
-          <FaChild className="input-icon" />
           Children:
           <input type="number" value={children} onChange={(e) => setChildren(Number(e.target.value))} />
         </label>
-        <button type="submit" className="search-button">
-          <FaSearch /> Search
-        </button>
+        <button type="submit">Search</button>
       </form>
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
+
+      <div className="highlights-section">
+        <h2>Why Book With Us?</h2>
+        <div className="highlights">
+          <div className="highlight">
+            <FaPlane size={50} />
+            <h3>Easy Booking</h3>
+            <p>Book your flights in just a few clicks.</p>
+          </div>
+          <div className="highlight">
+            <FaGlobe size={50} />
+            <h3>Global Coverage</h3>
+            <p>Flights to destinations all around the world.</p>
+          </div>
+          <div className="highlight">
+            <FaUsers size={50} />
+            <h3>24/7 Support</h3>
+            <p>Our support team is here to help you anytime.</p>
+          </div>
+          <div className="highlight">
+            <FaTicketAlt size={50} />
+            <h3>Best Prices</h3>
+            <p>We offer the best prices for your travels.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="footer">
+        <p>© 2024 Your Company. All rights reserved.</p>
+      </div>
     </div>
   );
 };
