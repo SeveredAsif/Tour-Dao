@@ -8,7 +8,11 @@
   background-color: #1b1b1b;
   color: #ffffff;
   font-family: 'Roboto', sans-serif;
-  position: relative; /* Add relative positioning to parent container */
+  background-image: url('../pictures/background.jpg'); /* Add a background image */
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 h1 {
@@ -24,6 +28,9 @@ h1 {
   flex-direction: column;
   gap: 15px;
   margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .flight-form label {
@@ -31,6 +38,11 @@ h1 {
   flex-direction: column;
   font-size: 1.2em;
   position: relative; /* Add relative positioning to label for suggestions list */
+}
+
+.input-icon {
+  margin-right: 8px;
+  color: #e50914;
 }
 
 .flight-form input,
@@ -44,7 +56,7 @@ h1 {
   border-radius: 5px;
 }
 
-.flight-form button {
+.search-button {
   padding: 10px;
   font-size: 1.2em;
   cursor: pointer;
@@ -54,9 +66,12 @@ h1 {
   border-radius: 5px;
   margin-top: 10px;
   transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.flight-form button:hover {
+.search-button:hover {
   background-color: #b20710;
 }
 
@@ -74,12 +89,12 @@ h1 {
   position: absolute; /* Position the suggestions list absolutely */
   top: calc(100% + 5px); /* Position it just below the input field */
   left: 0;
-  color: #fff; /* Change text color to white for better readability */
 }
 
 .suggestions-list li {
   padding: 10px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .suggestions-list li:hover {

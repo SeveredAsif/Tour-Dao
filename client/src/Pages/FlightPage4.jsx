@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
 import '../css/FlightPage.css';
+import { FaPlaneDeparture, FaPlaneArrival, FaCalendarAlt, FaUsers, FaChild, FaSearch } from 'react-icons/fa';
 
 const FlightPage4 = () => {
   const [from, setFrom] = useState('BOM');
@@ -39,7 +40,7 @@ const FlightPage4 = () => {
       .then(response => {
         setLoading(false);
         console.log(response.data);
-        navigate('/results2', { state:  response.data  });
+        navigate('/results2', { state: response.data });
       })
       .catch(err => {
         setError('Error fetching flights');
@@ -85,6 +86,7 @@ const FlightPage4 = () => {
       <h1>Search for Flights</h1>
       <form onSubmit={handleSubmit} className="flight-form">
         <label>
+          <FaPlaneDeparture className="input-icon" />
           From:
           <input type="text" value={from} onChange={handleFromChange} />
           {showFromSuggestions && fromSuggestions.length > 0 && (
@@ -98,6 +100,7 @@ const FlightPage4 = () => {
           )}
         </label>
         <label>
+          <FaPlaneArrival className="input-icon" />
           To:
           <input type="text" value={to} onChange={handleToChange} />
           {showToSuggestions && toSuggestions.length > 0 && (
@@ -111,10 +114,12 @@ const FlightPage4 = () => {
           )}
         </label>
         <label>
+          <FaCalendarAlt className="input-icon" />
           Departure Date:
           <input type="date" value={departureDate} onChange={(e) => setDepartureDate(e.target.value)} />
         </label>
         <label>
+          <FaCalendarAlt className="input-icon" />
           Return Date:
           <input type="date" value={returnDate} onChange={(e) => setReturnDate(e.target.value)} />
         </label>
@@ -127,14 +132,18 @@ const FlightPage4 = () => {
           </select>
         </label>
         <label>
+          <FaUsers className="input-icon" />
           Adults:
           <input type="number" value={adults} onChange={(e) => setAdults(Number(e.target.value))} />
         </label>
         <label>
+          <FaChild className="input-icon" />
           Children:
           <input type="number" value={children} onChange={(e) => setChildren(Number(e.target.value))} />
         </label>
-        <button type="submit">Search</button>
+        <button type="submit" className="search-button">
+          <FaSearch /> Search
+        </button>
       </form>
 
       {loading && <p>Loading...</p>}
