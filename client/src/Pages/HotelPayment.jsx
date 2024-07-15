@@ -64,7 +64,7 @@ const HotelPayment = () => {
   return (
     <div>
       <Navbar/>
-      <h1 style={{ textAlign: 'center' }}>Complete Payment!!</h1>
+      <h1 style={{ textAlign: 'center' }}>Complete Your Payment!</h1>
 
       <div className="text-center">
       <div className="form-check form-check-inline">

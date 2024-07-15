@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link,useNavigate, useLocation } from 'react-router-dom';
 
 const HotelDetails = () => {
   const [hotels, setHotels] = useState([]);
@@ -75,6 +75,7 @@ const HotelDetails = () => {
               <p>{hotel.accessibilityLabel}</p>
               <p>Review: {hotel.reviewScore}</p>
               <p>Price: ${generateRandomNumber(hotel.name)}</p>
+              
               <button
                 type="button" // Ensure type is "button" if it doesn't submit a form
                 className="search-button"
