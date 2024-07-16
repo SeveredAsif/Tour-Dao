@@ -108,7 +108,7 @@ const HotelBooking = () => {
               <button type="submit" className="btn btn-outline-info" onClick={handleSubmit}>
                 Confirm Booking
               </button>
-              <Modal show={showModal} handleClose={handleCloseModal} message="Payment Successful" />
+              <Modal show={showModal} handleClose={handleCloseModal} message="Booking Confirmed" />
               <Link to={`/hotels/booking/payment`}>
               <button type="button" class="btn btn-outline-success">Proceed to Payment</button>
               </Link>
