@@ -25,7 +25,7 @@ const HomePage = () => {
         <p>Discover amazing Destinations,best Hotel offers and Book your flights with ease.</p>
 
 <div class="input-group">
-  <input type="text" class="form-control" aria-label="Text input with segmented dropdown button"/>
+  <input type="text" class="form-control" placeholder= "Search Destinations,Hotels,Flights"aria-label="Text input with segmented dropdown button"/>
   <button type="button" class="btn btn-outline-secondary">
   <div className="icon-wrapper">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

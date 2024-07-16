@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';
 import '../css/HotelPage.css';
@@ -104,7 +106,7 @@ const HotelPage = () => {
 
             {/* Use Link component properly for navigation */}
             <Link to="/hotels/search/details">
-              <button type="submit" className="search-button">
+              <button type="submit" className="search-button" onClick={handleSubmit}> 
                 Search
               </button>
             </Link>
