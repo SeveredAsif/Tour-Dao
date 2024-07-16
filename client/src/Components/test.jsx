@@ -1,97 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, {  useEffect,useContext } from 'react';
 import Navbar from '../Components/Navbar';
+import '../css/HotelBooking.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { UserContext } from '../Components/UserContext';
 
-const HotelDetails = () => {
-  const [hotels, setHotels] = useState([]);
-  const [randomPrices, setRandomPrices] = useState({});
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-
+const HotelBooking = () => {
+  //const [error, setError] = useState(null);
   const location = useLocation();
-  const bookingData = location.state;
+  const { fullBookingData } = location.state || {};
+  const { username } = useContext(UserContext); // Access the username from the context
 
-  // Function to generate random number for a hotel
-  const generateRandomNumber = (hotelName) => {
-    if (!randomPrices[hotelName]) {
-      // Generate a random price if not already generated for this hotel
-      const randomPrice = Math.floor(Math.random() * 1000);
-      setRandomPrices((prevPrices) => ({
-        ...prevPrices,
-        [hotelName]: randomPrice,
-      }));
-      return randomPrice;
-    } else {
-      // Return stored random price if already generated
-      return randomPrices[hotelName];
-    }
-  };
-
-  // Handle form submission
-  const handleSubmit = (hotelName, price) => {
-
-
-    // Ensure bookingData is defined and contains necessary fields
-    if (!bookingData || !bookingData.destination || !bookingData.checkIn || !bookingData.checkOut || !bookingData.guests) {
-      console.log(bookingData)
-      console.error('Booking data is incomplete or undefined.');
-      return;
-    }
-
-    // Prepare data to send to next route
-    const fullBookingData = {
-      ...bookingData, // Include all fields from bookingData
-      hotelName,      // Add hotelName to the booking data
-      price,          // Add price to the booking data
-    };
-
-    console.log('Full Booking Data:', fullBookingData);
-
-    // Navigate to next route with state
-    navigate('/hotels/booking/details', { state: { fullBookingData } });
-  };
-
-  // Fetch hotels data on component mount
   useEffect(() => {
-    axios.get("http://localhost:4000/hotels/search/details")
-      .then((response) => {
-        setHotels(response.data.data);
-      })
-      .catch((error) => {
-        setError(error); // Handle axios error
-      });
-  }, []);
+    console.log('Full Booking Data:', fullBookingData);
+  }, [fullBookingData]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const dataToSend = {
+        ...fullBookingData,
+        username // Assuming username is a string obtained from context
+      };
+      
+      /*const response = await axios.post('http://localhost:4000/hotels/booking/information', fullBookingData);*/
+      const response = await axios.post('http://localhost:4000/hotels/booking/information', dataToSend);
+
+      console.log('Success:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+      //setError(error.message);
+    }
+  };
 
   return (
     <div className="hotel-page">
       <Navbar />
-      {error ? (
-        <div>Error: {error.message}</div>
-      ) : (
-        <div className="hotels-list">
-          {hotels.map((hotel, index) => (
-            <div key={index} className="hotel-card">
-              <img src={hotel.photoUrl} alt={hotel.name} />
-              <h3>{hotel.name}</h3>
-              <p>{hotel.accessibilityLabel}</p>
-              <p>Review: {hotel.reviewScore}</p>
-              <p>Price: ${generateRandomNumber(hotel.name)}</p>
-              
-              <button
-                type="button" // Ensure type is "button" if it doesn't submit a form
-                className="search-button"
-                onClick={() => handleSubmit(hotel.name, randomPrices[hotel.name])}
-              >
-                Book Now
-              </button>
-              
-            </div>
-          ))}
+      {fullBookingData ? (
+        <div>
+          <h2>Booking Details</h2>
+          <p>Destination: {fullBookingData.destination}</p>
+          <p>Check-In: {fullBookingData.checkIn}</p>
+          <p>Check-Out: {fullBookingData.checkOut}</p>
+          <p>Guests: {fullBookingData.guests}</p>
+          <p>Hotel Name: {fullBookingData.hotelName}</p>
+          <p>Price: ${fullBookingData.price}</p>
+          <button type="submit" className="search-button" onClick={handleSubmit}>
+              Confirm Booking
+            </button>
+          <Link to={`/hotels/booking/payment`}>
+            <button type="submit" className="search-button">
+              Proceed to payment
+            </button>
+          </Link>
         </div>
+      ) : (
+        <p>No booking data available.</p>
       )}
     </div>
   );
 };
 
-export default HotelDetails;
+export default HotelBooking;

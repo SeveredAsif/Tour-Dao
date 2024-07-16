@@ -108,7 +108,8 @@ const HotelDetails = () => {
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item"> 
                         <img src={star} style={{ width: '50px', height: '50px' }}/>
-                        <b style={{margin: "10px"}}> {hotel.reviewScore} </b></li> 
+                        <b style={{margin: "10px"}}> {hotel.reviewScore} </b>
+                        </li> 
                       <li className="list-group-item">      
                       <img src={dollar} style={{ width: '50px', height: '50px' }}/>
                       <b style={{margin: "10px"}}> {generateRandomNumber(hotel.name)}</b>          
@@ -134,7 +135,10 @@ const HotelDetails = () => {
           {/* Checkbox and Texts Column */}
           <div class="form-check form-switch checkbox-container">
             <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"/>
-            <label class="form-check-label" for="flexSwitchCheckDefault">Apply Filters</label>
+            <label class="form-check-label" for="flexSwitchCheckDefault">
+            <b style={{margin: "10px"}}>  Apply Filters </b>
+             
+              </label>
           </div>
 
           <br/>
