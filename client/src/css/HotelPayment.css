@@ -31,6 +31,41 @@
     border: 0;
     border-top: 1px solid #ccc; /* Gray border color for hr */
   }
+
+
+
+  .parent-container {
+    display: flex;
+    justify-content: center; /* Centers the child container horizontally */
+    align-items: center; /* Centers the child container vertically */
+    height: 50vh; /* Full viewport height to center vertically */
+    width: 100%; /* Full width */
+    padding: 20px; /* Optional: adds padding to the parent container */
+    box-sizing: border-box; /* Ensures padding is included in the parent's total width */
+  }
   
+  .qr-container {
+    display: flex;
+    justify-content: center; /* Centers the image horizontally */
+    align-items: center; /* Centers the image vertically */
+    padding: 20px; /* Optional: adds padding to the container */
+    box-sizing: border-box; /* Ensures padding is included in the container's total width */
+  }
+  
+  .qr-image {
+    height: 200px;
+    width: 200px;
+    border: 2px solid black;
+    margin: 10px;
+  }
+
+  .container-digital {
+    border: 2px solid lightblue;
+    padding: 20px;
+    border-radius: 8px; /* Optional: for rounded corners */
+    margin: 20px auto; /* Center the container horizontally */
+    width: 500px;
+    box-sizing: border-box; /* Include padding and border in the element's total width */
+  }
   
   

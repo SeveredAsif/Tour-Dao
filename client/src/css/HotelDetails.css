@@ -1,0 +1,88 @@
+/* Assuming this is your CSS file or style block */
+
+.hotels-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust the gap between cards */
+  }
+  
+  .card-size {
+    width: 50px; /* Width of each card */
+    margin-bottom: 20px; /* Margin at the bottom of each card */
+    border: 1px solid #ccc; /* Optional: Border for each card */
+    border-radius: 8px; /* Optional: Rounded corners for the card */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for a card */
+  }
+  
+  .card-img-top {
+    width: 100%; /* Ensure the image fills the card width */
+    height: 200px; /* Set a fixed height for the image */
+    object-fit: cover; /* Ensure the image covers the entire area */
+    border-top-left-radius: 8px; /* Optional: Rounded corners for the image */
+    border-top-right-radius: 8px;
+  }
+  
+  .card-body {
+    padding: 1rem; /* Padding inside the card body */
+  }
+  
+  .card-title {
+    font-size: 1.25rem; /* Size of the card title */
+    margin-bottom: 0.75rem; /* Margin at the bottom of the title */
+  }
+  
+  .card-text {
+    color: #666; /* Color of the text */
+  }
+  
+  .list-group-item {
+    padding: 1.75rem 1.25rem; /* Padding for list items */
+  }
+  
+  .search-button {
+    background-color: #007bff; /* Background color of the button */
+    color: #fff; /* Text color of the button */
+    border: none; /* Remove border */
+    padding: 0.5rem 1rem; /* Padding inside the button */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+  }
+  
+
+  .hotel-page {
+    /*background-color: rgb(205, 203, 203);*/
+   /* background-image: url('../pictures/hotel-bg.png');*/ /* Replace with your image path */
+    background-size: cover; /* Cover the entire background */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent repeating of the background image */
+    /* Optionally, you can add more styles to enhance the background display */
+  }
+  
+
+  .checkbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .checkbox-item {
+    margin: 0 10px; /* Adjust spacing between checkboxes */
+  }
+  
+
+  .icon-wrapper {
+    display: inline-block; /* Ensures the wrapper respects its contents */
+    width: 24px; /* Adjust width as needed */
+    height: 24px; /* Adjust height as needed */
+  }
+  
+  .icon-wrapper svg {
+    width: 100%; /* Make the SVG element fill its container */
+    height: 100%; /* Make the SVG element fill its container */
+    stroke-width: 1; /* Adjust stroke width if necessary */
+  }

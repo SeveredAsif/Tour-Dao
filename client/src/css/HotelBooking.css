@@ -1,0 +1,18 @@
+
+  .container {
+    background-color: rgba(255, 255, 255, 0.1); /* Adjust alpha to control transparency */
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .icon-wrapper {
+    display: inline-block; /* Ensures the wrapper respects its contents */
+    width: 24px; /* Adjust width as needed */
+    height: 24px; /* Adjust height as needed */
+  }
+  
+  .icon-wrapper svg {
+    width: 100%; /* Make the SVG element fill its container */
+    height: 100%; /* Make the SVG element fill its container */
+    stroke-width: 1; /* Adjust stroke width if necessary */
+  }

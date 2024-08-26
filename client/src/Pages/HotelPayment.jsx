@@ -64,7 +64,7 @@ const HotelPayment = () => {
   return (
     <div>
       <Navbar/>
-      <h1>Complete Payment!!</h1>
+      <h1 style={{ textAlign: 'center' }}>Complete Your Payment!</h1>
 
       <div className="text-center">
       <div className="form-check form-check-inline">
@@ -167,25 +167,28 @@ const HotelPayment = () => {
 
       {selectedOption === 'digital' && (
         <form onSubmit={handleDigitalPaymentSubmit}>
-          <div className="card-container">
-      {/* Apply CSS class to container */}
-      <img src={mobile} className="card-image" alt="Card" />
-    </div>
-          <div>
-            <label>
-              Transaction ID:
-              <input
-                type="text"
-                value={transactionId}
-                onChange={handleTransactionIdChange}
-                required
-              />
-            </label>
-          </div>
-          <div>
-            <img src={qr_Image} alt="QR Code" />
-          </div>
-          <button type="submit">Submit Digital Payment</button>
+
+<h5 style={{ textAlign: 'center' }}>Scan the QR CODE to pay</h5>
+<div className="parent-container">
+  <div className="qr-container">
+    <img 
+      src={qr_Image} 
+      alt="QR Code" 
+      className="qr-image" 
+    />
+  </div>
+</div>
+          
+<div className="container-digital">
+  <div className="mb-3">
+    <label for="exampleFormControlInput1" className="form-label">Transaction ID:</label>
+    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Trans Id sent in your mobile"/>
+  </div>
+  <button type="submit" className="btn btn-outline-info" onClick={handlePaymentSubmit}>Submit Digital Payment</button>
+  
+</div>
+<Modal show={showModal} handleClose={handleCloseModal} message="Payment Successful" />
+
         </form>
       )}
 
