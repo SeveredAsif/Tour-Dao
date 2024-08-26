@@ -699,6 +699,9 @@ app.post('/destination/recommend', (req, res) => {
       console.error(`stderr: ${data}`);
   });
 
+
+  
+
   pythonProcess.on('close', (code) => {
       if (code === 0) {
           res.json({ result });

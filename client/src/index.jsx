@@ -17,12 +17,9 @@ import Login from "./Pages/Login";
 import Registration from "./Pages/Registration";
 import Dashboard from "./Pages/Dashboard";
 import { UserProvider } from "./Components/UserContext";
-<<<<<<< HEAD
-import PlaceRecommend from "./Pages/PlaceRecommend"
-=======
 import Layout from "./Pages/Layout"; // Adjust the path as needed
 import Webcam from "./Pages/Webcam";
->>>>>>> 0bac58555bce53942038ba65d9943288f1b15896
+import PlaceRecommend from "./Pages/PlaceRecommend"
 
 const router = createBrowserRouter([
   {
@@ -33,6 +30,7 @@ const router = createBrowserRouter([
       { path: "/registration", element: <Registration /> },
       { path: "/", element: <HomePage /> },
       { path: "/destinations", element: <App /> },
+      { path: "/destination/recommend", element: < PlaceRecommend /> },
       { path: "/flights", element: <FlightPageApp /> },
       { path: "/hotels", element: <HotelPage /> },
       { path: "/results", element: <ResultsPage /> },
@@ -46,58 +44,6 @@ const router = createBrowserRouter([
       { path: "/webcam", element: <Webcam /> },
     ],
   },
-<<<<<<< HEAD
-  {
-    path: "/destinations",
-    element: <App />,
-  },
-  {
-    path: "/destination/recommend",
-    element: <PlaceRecommend />,
-  },
-  {
-    path: "/flights",
-    element: <FlightPageApp />,
-  },
-  {
-    path: "/hotels",
-    element: <HotelPage />,
-  },
-  {
-    path: "/results",
-    element: <ResultsPage />,
-  },
-  {
-    path: "/results2",
-    element: <ResultsPage2 />,
-  },
-  {
-    path: "/detail-flight",
-    element:<DetailFlight/>
-  },
-  {
-    path: "/hotels/search/details",
-    element: <HotelDetails />,
-  },
-  {
-    path: "/hotels/booking/payment",
-    element: <HotelPayment />,
-  },
-  {
-    path: "/hotels/booking/details",
-    element: <HotelBooking />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/logout",
-    element: <Login />,
-  },
-
-=======
->>>>>>> 0bac58555bce53942038ba65d9943288f1b15896
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

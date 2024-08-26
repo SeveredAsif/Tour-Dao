@@ -20,7 +20,7 @@ places = places.merge(city,on='City')
 # In[6]:
 
 
-new_places = places[['City','Place','City_desc','Place_desc']]
+new_places = places[['City','Place','City_desc','Place_desc','Distance','Ratings_x']]
 
 
 # In[7]:
@@ -34,6 +34,7 @@ def convert(text):
 # In[8]:
 
 new_places['Place'] = new_places['Place'].apply(convert)
+new_places['Ratings_x'] = new_places['Ratings_x'].fillna(0)
 
 # In[10]:
 
@@ -88,16 +89,27 @@ similarity = cosine_similarity(vectors)
 
 
 # In[43]:
-
+import json
 
 def recommend(Place):
     place_index = new_places[new_places['Place'].str.strip() == Place].index[0]
     distances = similarity[place_index] 
-    place_list = sorted(list(enumerate(distances)),reverse=True,key=lambda x:x[1])[1:6]
+    place_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[0:6]
 
+    recommendations = []
+    
     for i in place_list:
-        print(new_places.iloc[i[0]].Place)
-        #print(f"City: {new_places['City']}, Place: {new_places['Place']}, Description: {new_places['Place_desc']}")
+        place_info = {
+            'city': new_places.iloc[i[0]].City,  # Assuming there's a 'City' column
+            'place': new_places.iloc[i[0]].Place,
+            'description': new_places.iloc[i[0]].Place_desc,
+            'distance': new_places.iloc[i[0]].Distance,# Assuming there's a 'Description' column
+            'ratings': new_places.iloc[i[0]].Ratings_x
+        }
+        recommendations.append(place_info)
+
+    recommendations_json = json.dumps(recommendations, indent=4)
+    print(recommendations_json)
 
 
 # In[53]:
