@@ -1,4 +1,3 @@
-import React, { useEffect, useContext } from 'react';
 import React, { useEffect,useState, useContext } from 'react';
 import Navbar from '../Components/Navbar';
 import Footer from '../Components/Footer';

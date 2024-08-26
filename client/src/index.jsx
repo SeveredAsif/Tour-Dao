@@ -18,6 +18,7 @@ import Registration from "./Pages/Registration";
 import Dashboard from "./Pages/Dashboard";
 import { UserProvider } from "./Components/UserContext";
 import Layout from "./Pages/Layout"; // Adjust the path as needed
+import Webcam from "./Pages/Webcam";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: "/hotels/booking/details", element: <HotelBooking /> },
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/logout", element: <Login /> },
+      { path: "/webcam", element: <Webcam /> },
     ],
   },
 ]);
