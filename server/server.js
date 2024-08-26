@@ -9,6 +9,7 @@ const initDb = require("./initDb");
 const fs = require("fs");
 const csv = require("csv-parser");
 const jwt = require("jsonwebtoken");
+const { spawn } = require('child_process');
 
 const port = 4000;
 const secretKey = "your_secret_key"; // Define your secret key for JWT
@@ -496,7 +497,6 @@ app.post('/hotels/booking/information', async (req, res) => {
 
 
 
-
 //login
 
 app.post("/register", (req, res) => {
@@ -658,7 +658,76 @@ app.get('/bookings/hotels/:username', (req, res) => {
 
 
 
+
+
+
+
+
+///////////////////////////////////destination
+
+// Example of using spawn to run a Python script
+app.post('/destination/recommend', (req, res) => {
+  const { query } = req.body; // Get the query from the request body
+
+  const pythonProcess = spawn('python', ['travel-Recommendation.py', query]);
+
+  let result = '';
+
+  pythonProcess.stdout.on('data', (data) => {
+      result += data.toString();
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+      if (code === 0) {
+          res.json({ result });
+      } else {
+          res.status(500).json({ error: 'Error running the Python script' });
+      }
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Start the Express server
 app.listen(port, () => {
   console.log(`Server running on port ${port}!`);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -17,6 +17,7 @@ import Login from "./Pages/Login";
 import Registration from "./Pages/Registration";
 import Dashboard from "./Pages/Dashboard";
 import { UserProvider } from "./Components/UserContext";
+import PlaceRecommend from "./Pages/PlaceRecommend"
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/destinations",
     element: <App />,
+  },
+  {
+    path: "/destination/recommend",
+    element: <PlaceRecommend />,
   },
   {
     path: "/flights",

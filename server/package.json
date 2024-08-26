@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "node-geocoder": "^4.3.0",
     "opencage-api-client": "^1.0.7",
+    "python-shell": "^5.0.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

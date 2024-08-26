@@ -39,6 +39,7 @@ const Destinations = () => {
           </div>
         ))}
       </div>
+      <a class="dropdown-item" href="/destination/recommend">Serach Destinations</a>
     </div>
   );
 };
