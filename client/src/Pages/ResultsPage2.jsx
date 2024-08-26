@@ -1,7 +1,7 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../Components/Navbar';
+import { FaPlaneDeparture, FaPlaneArrival, FaClock, FaInfoCircle } from 'react-icons/fa';
 import '../css/ResultsPage.css';
 
 const ResultsPage = () => {
@@ -21,11 +21,11 @@ const ResultsPage = () => {
           flights.map((flight, index) => (
             <div key={index} className="flight-box">
               <div className="flight-details">
-                <p><strong>From:</strong> {flight.originStationCode}</p>
-                <p><strong>To:</strong> {flight.destinationStationCode}</p>
-                <p><strong>Departure:</strong> {flight.departureDateTime}</p>
-                <p><strong>Arrival:</strong> {flight.arrivalDateTime}</p>
-                <p><strong>Flight Number:</strong> {flight.flightNumber}</p>
+                <p><FaPlaneDeparture /> <strong>From:</strong> {flight.originStationCode}</p>
+                <p><FaPlaneArrival /> <strong>To:</strong> {flight.destinationStationCode}</p>
+                <p><FaClock /> <strong>Departure:</strong> {flight.departureDateTime}</p>
+                <p><FaClock /> <strong>Arrival:</strong> {flight.arrivalDateTime}</p>
+                <p><FaInfoCircle /> <strong>Flight Number:</strong> {flight.flightNumber}</p>
               </div>
               <button className="detail-button" onClick={() => handleDetailClick(flight)}>Detail</button>
             </div>
@@ -33,10 +33,6 @@ const ResultsPage = () => {
         ) : (
           <p className="no-flights-message">No flights found.</p>
         )}
-      </div>
-      <div className="promo-section">
-        <img src="../pictures/flightbg.jpg" alt="Fly with us" className="promo-image" />
-        <div className="promo-text">Fly with Us</div>
       </div>
       <footer className="footer">
         <p>Contact Us</p>
