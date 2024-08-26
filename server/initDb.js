@@ -49,9 +49,6 @@ const initDb = (dbFilePath) => {
         }
       );
 
-
-
-
       ////////////////newwww
 
       db.run(
@@ -80,10 +77,9 @@ const initDb = (dbFilePath) => {
         (err) => {
           if (err) {
             console.error("Error creating table " + err.message);
-          } 
+          }
         }
       );
-
 
       db.run(
         `
@@ -106,18 +102,11 @@ const initDb = (dbFilePath) => {
         (err) => {
           if (err) {
             console.error("Error creating table " + err.message);
-          } 
+          }
         }
       );
-
-    
-      
     }
-  }
-  
-  
-  
-  );
+  });
 
   return db;
 };

@@ -5,10 +5,12 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const app = express();
-const initDb = require("./initDb");
+//const initDb = require("./initDb");
+const normalDb = require("./normalDb.js");
 const fs = require("fs");
 const csv = require("csv-parser");
 const jwt = require("jsonwebtoken");
+const { run } = require("./gemini-start.js");
 
 const port = 4000;
 const secretKey = "your_secret_key"; // Define your secret key for JWT
@@ -28,7 +30,8 @@ app.use(
 
 // Initialize the SQLite database
 const dbFilePath = "./tour.db";
-const db = initDb(dbFilePath);
+//const db = initDb(dbFilePath);
+const db = normalDb(dbFilePath);
 
 let airports = [];
 
@@ -38,22 +41,21 @@ fs.createReadStream("iata-icao.csv")
     airports.push(row);
   })
   .on("end", () => {
-    console.log("CSV file successfully processed");
+    console.log("CSV file successfully processed here!");
   });
 
-  app.get("/query", (req, res) => {
-    const sql = "SELECT * FROM destinations";
-    db.all(sql,(err, rows) => {
-      if (err) {
-        res.status(400).json({ error: err.message });
-        return;
-      }
-      res.json({
-        rows,
-      });
+app.get("/query", (req, res) => {
+  const sql = "SELECT COUNT(*) FROM destinations";
+  db.all(sql, (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      rows,
     });
   });
-  
+});
 
 // Endpoint to search for airports
 app.get("/airports/search", (req, res) => {
@@ -328,18 +330,6 @@ app.post("/flights/searchh", (req, res) => {
 
 //hotels
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*let hotelsData = [];
 
 // Path to your CSV file
@@ -370,7 +360,6 @@ fs.createReadStream(csvFilePath)
         console.error('Error encountered while processing CSV:', err);
     });*/
 
-
 // API endpoint to fetch all hotels data
 app.get("/hotels", (req, res) => {
   const sql = "SELECT * FROM hotels";
@@ -385,7 +374,6 @@ app.get("/hotels", (req, res) => {
   });
 });
 
-
 // API endpoint to fetch all hotels data
 app.get("/hotels/search/details", (req, res) => {
   const sql = "SELECT * FROM berlin_hotels";
@@ -394,13 +382,12 @@ app.get("/hotels/search/details", (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-   
+
     res.json({
       data: rows,
     });
   });
 });
-
 
 /*app.post('/hotels/booking/information', async (req, res) => {
   const bookingData = req.body;
@@ -428,7 +415,6 @@ app.get("/hotels/search/details", (req, res) => {
   });
 });*/
 
-
 app.get("/hotels/booking/information", (req, res) => {
   const sql = "SELECT * FROM hotel_bookings";
   db.all(sql, [], (err, rows) => {
@@ -436,37 +422,46 @@ app.get("/hotels/booking/information", (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
-   
+
     res.json({
       data: rows,
     });
   });
 });
 
-
-
 // Endpoint to handle hotel booking information
-app.post('/hotels/booking/information', async (req, res) => {
+app.post("/hotels/booking/information", async (req, res) => {
   const bookingData = req.body;
-  const { destination, checkIn, checkOut, guests, hotelName, price, username } = bookingData;
-  console.log(bookingData)
+  const { destination, checkIn, checkOut, guests, hotelName, price, username } =
+    bookingData;
+  console.log(bookingData);
 
   // Check if all required fields are present
-  if (!destination || !checkIn || !checkOut || !guests || !hotelName || !price || !username) {
-    return res.status(400).json({ error: 'Missing required fields in booking data' });
+  if (
+    !destination ||
+    !checkIn ||
+    !checkOut ||
+    !guests ||
+    !hotelName ||
+    !price ||
+    !username
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Missing required fields in booking data" });
   }
 
   // Assuming you have a SQL query to retrieve the user ID based on username
-  const getUserSql = 'SELECT id FROM users WHERE username = ?';
+  const getUserSql = "SELECT id FROM users WHERE username = ?";
 
   // Retrieve user ID from the database
   db.get(getUserSql, [username], (err, row) => {
     if (err) {
-      console.error('Error retrieving user:', err.message);
-      return res.status(500).json({ error: 'Internal Server Error' });
+      console.error("Error retrieving user:", err.message);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
     if (!row) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     const userId = row.id;
@@ -476,26 +471,31 @@ app.post('/hotels/booking/information', async (req, res) => {
       INSERT INTO hotel_bookings (userId, destination, checkIn, checkOut, guests, hotelName, price)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    
-    const values = [userId, destination, checkIn, checkOut, guests, hotelName, price];
 
-    db.run(insertQuery, values, function(err) {
+    const values = [
+      userId,
+      destination,
+      checkIn,
+      checkOut,
+      guests,
+      hotelName,
+      price,
+    ];
+
+    db.run(insertQuery, values, function (err) {
       if (err) {
-        console.error('Error inserting booking data:', err.message);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error inserting booking data:", err.message);
+        return res.status(500).json({ error: "Internal Server Error" });
       }
 
       // Return success response with inserted booking data
-      res.status(200).json({ message: 'Booking data received successfully', booking: { id: this.lastID, ...bookingData, userId } });
+      res.status(200).json({
+        message: "Booking data received successfully",
+        booking: { id: this.lastID, ...bookingData, userId },
+      });
     });
   });
 });
-
-
-
-
-
-
 
 //login
 
@@ -545,7 +545,7 @@ app.post("/login", (req, res) => {
     }
 
     const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: "1h" });
-    res.json({ message: "Login successful", token, id:`${user.id}` });
+    res.json({ message: "Login successful", token, id: `${user.id}` });
   });
 });
 
@@ -555,11 +555,13 @@ app.post("/login", (req, res) => {
 // });
 
 // Endpoint to book a flight
-app.post('/book', (req, res) => {
+app.post("/book", (req, res) => {
   const { username, flight, paymentMethod, paymentDetails } = req.body;
 
   if (!paymentMethod || !paymentDetails) {
-    return res.status(400).json({ error: 'Payment method and details are required' });
+    return res
+      .status(400)
+      .json({ error: "Payment method and details are required" });
   }
 
   const flightId = flight.id; // Extract flight ID from the flight object
@@ -567,24 +569,25 @@ app.post('/book', (req, res) => {
   console.log("Booking request received:", username, flightId);
 
   // Get the userId from the username
-  const getUserSql = 'SELECT id FROM users WHERE username = ?';
+  const getUserSql = "SELECT id FROM users WHERE username = ?";
   db.get(getUserSql, [username], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     if (!row) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     const userId = row.id;
 
     // Insert the booking into the bookings table
-    const insertBookingSql = 'INSERT INTO bookings (userId, flightId) VALUES (?, ?)';
+    const insertBookingSql =
+      "INSERT INTO bookings (userId, flightId) VALUES (?, ?)";
     db.run(insertBookingSql, [userId, flightId], function (err) {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ message: 'Flight booked successfully!' });
+      res.json({ message: "Flight booked successfully!" });
     });
   });
 });
@@ -622,7 +625,7 @@ app.post('/book', (req, res) => {
 // });
 
 // Get flight bookings by username
-app.get('/bookings/flights/:username', (req, res) => {
+app.get("/bookings/flights/:username", (req, res) => {
   const { username } = req.params;
   const sql = `
     SELECT flights.*, bookings.status
@@ -640,7 +643,7 @@ app.get('/bookings/flights/:username', (req, res) => {
 });
 
 // Get hotel bookings by username
-app.get('/bookings/hotels/:username', (req, res) => {
+app.get("/bookings/hotels/:username", (req, res) => {
   const { username } = req.params;
   const sql = `
     SELECT hotel_bookings.*
@@ -656,7 +659,16 @@ app.get('/bookings/hotels/:username', (req, res) => {
   });
 });
 
-
+app.get("/gemini", async (req, res) => {
+  const { prompt } = req.query; // Using req.query to get the query parameter
+  try {
+    console.log(prompt);
+    const text = await run(prompt);
+    res.json({ text });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
 
 // Start the Express server
 app.listen(port, () => {

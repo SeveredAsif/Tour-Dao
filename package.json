@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@google/generative-ai": "^0.17.0",
+    "@tensorflow-models/qna": "^1.0.2",
+    "@tensorflow/tfjs": "^4.20.0",
+    "dotenv": "^16.4.5",
+    "react-loader-spinner": "^6.1.6"
+  }
+}

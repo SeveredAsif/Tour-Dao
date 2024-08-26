@@ -51,6 +51,13 @@ body {
 .flight-details p {
   margin: 8px 0;
   font-size: 1.1em;
+  display: flex;
+  align-items: center;
+}
+
+.flight-details p svg {
+  margin-right: 8px;
+  color: var(--secondary-color);
 }
 
 .detail-button {
@@ -73,26 +80,6 @@ body {
   color: var(--secondary-color);
   text-align: center;
   margin-top: 50px;
-}
-
-.promo-section {
-  text-align: center;
-  margin: 40px 0;
-}
-
-.promo-image {
-  max-width: 80%;
-  height: auto;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.promo-text {
-  font-size: 2.5em;
-  color: var(--primary-color);
-  margin-top: 20px;
-  font-family: var(--header-font-family);
-  font-weight: bold;
 }
 
 .footer {

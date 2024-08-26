@@ -33,6 +33,7 @@ const HotelDetails = () => {
 
     // Ensure bookingData is defined and contains necessary fields
     if (!bookingData || !bookingData.destination || !bookingData.checkIn || !bookingData.checkOut || !bookingData.guests) {
+      console.log(bookingData);
       console.error('Booking data is incomplete or undefined.');
       return;
     }

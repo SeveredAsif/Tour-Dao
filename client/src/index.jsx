@@ -17,76 +17,36 @@ import Login from "./Pages/Login";
 import Registration from "./Pages/Registration";
 import Dashboard from "./Pages/Dashboard";
 import { UserProvider } from "./Components/UserContext";
+import Layout from "./Pages/Layout"; // Adjust the path as needed
 
 const router = createBrowserRouter([
   {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/registration",
-    element: <Registration />,
-  },
-  {
     path: "/",
-    element: <HomePage />,
+    element: <Layout />, // Wrap everything in Layout
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/registration", element: <Registration /> },
+      { path: "/", element: <HomePage /> },
+      { path: "/destinations", element: <App /> },
+      { path: "/flights", element: <FlightPageApp /> },
+      { path: "/hotels", element: <HotelPage /> },
+      { path: "/results", element: <ResultsPage /> },
+      { path: "/results2", element: <ResultsPage2 /> },
+      { path: "/detail-flight", element: <DetailFlight /> },
+      { path: "/hotels/search/details", element: <HotelDetails /> },
+      { path: "/hotels/booking/payment", element: <HotelPayment /> },
+      { path: "/hotels/booking/details", element: <HotelBooking /> },
+      { path: "/dashboard", element: <Dashboard /> },
+      { path: "/logout", element: <Login /> },
+    ],
   },
-  {
-    path: "/destinations",
-    element: <App />,
-  },
-  {
-    path: "/flights",
-    element: <FlightPageApp />,
-  },
-  {
-    path: "/hotels",
-    element: <HotelPage />,
-  },
-  {
-    path: "/results",
-    element: <ResultsPage />,
-  },
-  {
-    path: "/results2",
-    element: <ResultsPage2 />,
-  },
-  {
-    path: "/detail-flight",
-    element:<DetailFlight/>
-  },
-  {
-    path: "/hotels/search/details",
-    element: <HotelDetails />,
-  },
-  {
-    path: "/hotels/booking/payment",
-    element: <HotelPayment />,
-  },
-  {
-    path: "/hotels/booking/details",
-    element: <HotelBooking />,
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: "/logout",
-    element: <Login />,
-  },
-
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <UserProvider>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </UserProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

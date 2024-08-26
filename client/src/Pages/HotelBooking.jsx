@@ -1,4 +1,4 @@
-import React, {  useEffect,useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Navbar from '../Components/Navbar';
 import axios from 'axios';
 import { Link, useLocation } from 'react-router-dom';
@@ -21,7 +21,7 @@ const HotelBooking = () => {
         ...fullBookingData,
         username // Assuming username is a string obtained from context
       };
-      
+
       /*const response = await axios.post('http://localhost:4000/hotels/booking/information', fullBookingData);*/
       const response = await axios.post('http://localhost:4000/hotels/booking/information', dataToSend);
 
@@ -45,8 +45,8 @@ const HotelBooking = () => {
           <p>Hotel Name: {fullBookingData.hotelName}</p>
           <p>Price: ${fullBookingData.price}</p>
           <button type="submit" className="search-button" onClick={handleSubmit}>
-              Confirm Booking
-            </button>
+            Confirm Booking
+          </button>
           <Link to={`/hotels/booking/payment`}>
             <button type="submit" className="search-button">
               Proceed to payment
