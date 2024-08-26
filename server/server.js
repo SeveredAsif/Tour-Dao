@@ -10,11 +10,8 @@ const normalDb = require("./normalDb.js");
 const fs = require("fs");
 const csv = require("csv-parser");
 const jwt = require("jsonwebtoken");
-<<<<<<< HEAD
 const { spawn } = require('child_process');
-=======
 const { run } = require("./gemini-start.js");
->>>>>>> 0bac58555bce53942038ba65d9943288f1b15896
 
 const port = 4000;
 const secretKey = "your_secret_key"; // Define your secret key for JWT
@@ -501,14 +498,11 @@ app.post("/hotels/booking/information", async (req, res) => {
   });
 });
 
-<<<<<<< HEAD
 
 
 
 
 
-=======
->>>>>>> 0bac58555bce53942038ba65d9943288f1b15896
 //login
 
 app.post("/register", (req, res) => {

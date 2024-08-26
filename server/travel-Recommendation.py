@@ -33,7 +33,6 @@ def convert(text):
 
 # In[8]:
 
-
 new_places['Place'] = new_places['Place'].apply(convert)
 
 # In[10]:
