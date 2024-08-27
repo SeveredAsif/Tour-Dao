@@ -19,6 +19,7 @@ import Dashboard from "./Pages/Dashboard";
 import { UserProvider } from "./Components/UserContext";
 import Layout from "./Pages/Layout"; // Adjust the path as needed
 import Webcam from "./Pages/Webcam";
+import Predict from "./Pages/Predict";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/logout", element: <Login /> },
       { path: "/webcam", element: <Webcam /> },
+      { path: "/predict", element: <Predict /> }
     ],
   },
 ]);

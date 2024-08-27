@@ -11,6 +11,8 @@ const fs = require("fs");
 const csv = require("csv-parser");
 const jwt = require("jsonwebtoken");
 const { run } = require("./gemini-start.js");
+const { PythonShell } = require("python-shell");
+const { spawn } = require("child_process");
 
 const port = 4000;
 const secretKey = "your_secret_key"; // Define your secret key for JWT
@@ -54,6 +56,32 @@ app.get("/query", (req, res) => {
     res.json({
       rows,
     });
+  });
+});
+
+app.post("/predict", (req, res) => {
+  const features = req.body;
+  const options = JSON.stringify(features);
+
+  const pythonProcess = spawn("python", ["predict.py", options]);
+
+  let result = "";
+
+  pythonProcess.stdout.on("data", (data) => {
+    result += data.toString();
+  });
+
+  pythonProcess.stderr.on("data", (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  pythonProcess.on("close", (code) => {
+    if (code === 0) {
+      console.log(result);
+      res.json({ result });
+    } else {
+      res.status(500).json({ error: "Error running the Python script" });
+    }
   });
 });
 
