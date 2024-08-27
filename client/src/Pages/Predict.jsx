@@ -3,35 +3,36 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/Predict.css';
+import Navbar from '../Components/Navbar.jsx'
 
 const Predict = () => {
     const [features, setFeatures] = useState({
-        hotel: '1',
+        hotel: '0',
         meal: '0',
-        market_segment: '1',
-        distribution_channel: '1',
+        market_segment: '0',
+        distribution_channel: '0',
         reserved_room_type: '1',
         deposit_type: '0',
-        customer_type: '2',
-        // year: '0',
-        // month: '12',
-        // day: '2',
-        lead_time: '3.135494',
-        arrival_date_week_number: '3.951244',
-        arrival_date_day_of_month: '2.944439',
+        customer_type: '0',
+        year: '0',
+        month: '7',
+        day: '1',
+        lead_time: '737',
+        arrival_date_week_number: '27',
+        arrival_date_day_of_month: '1',
         stays_in_weekend_nights: '0',
-        stays_in_week_nights: '1',
-        adults: '1',
+        stays_in_week_nights: '0',
+        adults: '2',
         children: '0',
         babies: '0',
         is_repeated_guest: '0',
-        previous_cancellations: '1',
+        previous_cancellations: '0',
         previous_bookings_not_canceled: '0',
-        agent: '0',
-        company: '3.713572',
-        adr: '4.189655',
-        required_car_parking_spaces: '0',
-        total_of_special_requests: '0',
+        agent: '0',//74.88
+        company: '0',//10.735
+        adr: '0',//101.969092
+        required_car_parking_spaces: '0',//0.062553
+        total_of_special_requests: '0',//0.571504
     });
 
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -41,10 +42,10 @@ const Predict = () => {
         setSelectedDate(date);
         setFeatures({
             ...features,
-            year: date.getFullYear().toString(),
+            year: (date.getFullYear() - 2015).toString(),
             arrival_date_day_of_month: date.getDate().toString(),
             day: date.getDate().toString(),
-            month: (date.getMonth() + 1).toString() // Month is 0-indexed in JavaScript
+            month: (date.getMonth() + 1).toString()
         });
     };
 
@@ -90,9 +91,12 @@ const Predict = () => {
     };
 
     return (
+        <>
+            <Navbar />    
+            <div className="container">  
+            <h1 className="page-title">Predict Hotel Booking Cancellation</h1>    
         <div className="form-container">
             <form onSubmit={handleSubmit}>
-                {/* Date picker for selecting day and month */}
                 <div className="date-picker-container">
                     <label htmlFor="arrival_date">Arrival Date:</label>
                     <DatePicker
@@ -102,12 +106,13 @@ const Predict = () => {
                     />
                 </div>
 
-                {/* Dropdowns for categorical features */}
+                <label htmlFor="hotel">Hotel:</label>
                 <select name="hotel" value={features.hotel} onChange={handleChange}>
                     <option value="0">Resort Hotel</option>
                     <option value="1">City Hotel</option>
                 </select>
 
+                <label htmlFor="meal">Meal:</label>
                 <select name="meal" value={features.meal} onChange={handleChange}>
                     <option value="0">BB</option>
                     <option value="1">FB</option>
@@ -116,6 +121,7 @@ const Predict = () => {
                     <option value="4">Undefined</option>
                 </select>
 
+                <label htmlFor="market_segment">Market Segment:</label>
                 <select name="market_segment" value={features.market_segment} onChange={handleChange}>
                     <option value="0">Direct</option>
                     <option value="1">Corporate</option>
@@ -127,6 +133,7 @@ const Predict = () => {
                     <option value="7">Aviation</option>
                 </select>
 
+                <label htmlFor="distribution_channel">Distribution Channel:</label>
                 <select name="distribution_channel" value={features.distribution_channel} onChange={handleChange}>
                     <option value="0">Direct</option>
                     <option value="1">Corporate</option>
@@ -135,6 +142,7 @@ const Predict = () => {
                     <option value="4">GDS</option>
                 </select>
 
+                <label htmlFor="reserved_room_type">Reserved Room Type:</label>
                 <select name="reserved_room_type" value={features.reserved_room_type} onChange={handleChange}>
                     <option value="0">C</option>
                     <option value="1">A</option>
@@ -147,12 +155,14 @@ const Predict = () => {
                     <option value="8">B</option>
                 </select>
 
+                <label htmlFor="deposit_type">Deposit Type:</label>
                 <select name="deposit_type" value={features.deposit_type} onChange={handleChange}>
                     <option value="0">No Deposit</option>
                     <option value="1">Refundable</option>
                     <option value="3">Non Refund</option>
                 </select>
 
+                <label htmlFor="customer_type">Customer Type:</label>
                 <select name="customer_type" value={features.customer_type} onChange={handleChange}>
                     <option value="0">Transient</option>
                     <option value="1">Contract</option>
@@ -160,41 +170,74 @@ const Predict = () => {
                     <option value="3">Group</option>
                 </select>
 
-                <select name="year" value={features.year} onChange={handleChange}>
+                {/* <select name="year" value={features.year} onChange={handleChange}>
                     <option value="0">2015</option>
                     <option value="1">2014</option>
                     <option value="2">2016</option>
                     <option value="3">2017</option>
-                </select>
+                </select> */}
 
-
+                <label htmlFor="lead_time">Lead Time:</label>
                 <input type="text" name="lead_time" value={features.lead_time} onChange={handleChange} placeholder="Lead Time" />
+                <label htmlFor="arrival_date_week_number">Arrival Date Week Number:</label>
                 <input type="text" name="arrival_date_week_number" value={features.arrival_date_week_number} onChange={handleChange} placeholder="Arrival Date Week Number" />
+                <label htmlFor="arrival_date_day_of_month">Arrival date day of month:</label>
                 <input type="text" name="arrival_date_day_of_month" value={features.arrival_date_day_of_month} onChange={handleChange} placeholder="Arrival Date Day of Month" />
+
+                <label htmlFor="stays_in_weekend_nights">Stays in Weekend Nights:</label>
                 <input type="text" name="stays_in_weekend_nights" value={features.stays_in_weekend_nights} onChange={handleChange} placeholder="Stays in Weekend Nights" />
+
+                <label htmlFor="stays_in_week_nights">Stays in Week Nights:</label>
                 <input type="text" name="stays_in_week_nights" value={features.stays_in_week_nights} onChange={handleChange} placeholder="Stays in Week Nights" />
+
+                <label htmlFor="adults">Adults:</label>
                 <input type="text" name="adults" value={features.adults} onChange={handleChange} placeholder="Adults" />
+
+                <label htmlFor="children">Children:</label>
                 <input type="text" name="children" value={features.children} onChange={handleChange} placeholder="Children" />
+
+                <label htmlFor="babies">Babies:</label>
                 <input type="text" name="babies" value={features.babies} onChange={handleChange} placeholder="Babies" />
+
+                <label htmlFor="is_repeated_guest">Is Repeated Guest:</label>
                 <input type="text" name="is_repeated_guest" value={features.is_repeated_guest} onChange={handleChange} placeholder="Is Repeated Guest" />
+
+                <label htmlFor="previous_cancellations">Previous Cancellations:</label>
                 <input type="text" name="previous_cancellations" value={features.previous_cancellations} onChange={handleChange} placeholder="Previous Cancellations" />
+
+                <label htmlFor="previous_bookings_not_canceled">Previous Bookings Not Canceled:</label>
                 <input type="text" name="previous_bookings_not_canceled" value={features.previous_bookings_not_canceled} onChange={handleChange} placeholder="Previous Bookings Not Canceled" />
+                <label htmlFor="lead_time">Lead Time:</label>
                 <input type="text" name="lead_time" value={features.lead_time} onChange={handleChange} placeholder="Lead Time" />
+                <label htmlFor="arrival_date_week_number">Arrival Date Week Number:</label>
                 <input type="text" name="arrival_date_week_number" value={features.arrival_date_week_number} onChange={handleChange} placeholder="Arrival Date Week Number" />
+
+                <label htmlFor="agent">Agent:</label>
                 <input type="text" name="agent" value={features.agent} onChange={handleChange} placeholder="Agent" />
+
+                <label htmlFor="company">Company:</label>
                 <input type="text" name="company" value={features.company} onChange={handleChange} placeholder="Company" />
+
+                <label htmlFor="adr">ADR:</label>
                 <input type="text" name="adr" value={features.adr} onChange={handleChange} placeholder="ADR" />
+
+                <label htmlFor="required_car_parking_spaces">Required Car Parking Spaces:</label>
                 <input type="text" name="required_car_parking_spaces" value={features.required_car_parking_spaces} onChange={handleChange} placeholder="Required Car Parking Spaces" />
+
+                <label htmlFor="total_of_special_requests">Total of Special Requests:</label>
                 <input type="text" name="total_of_special_requests" value={features.total_of_special_requests} onChange={handleChange} placeholder="Total of Special Requests" />
 
                 <button type="submit">Predict</button>
             </form>
+
             {prediction && (
-                <h3>
-                    Prediction: {`Canceled: ${(prediction[0] * 100)}% | Not Canceled: ${(prediction[1] * 100)}%`}
-                </h3>
+                <div className="prediction-result">
+                    <h3>Prediction: {`Probability of Cancelling: ${(prediction[0] * 100)}% | Probability of not Cancelling: ${(prediction[1] * 100)}%`}</h3>
+                </div>
             )}
         </div>
+        </div>
+        </>  
     );
 };
 
