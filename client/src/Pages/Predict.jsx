@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../css/Predict.css'; // Import the CSS file
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import '../css/Predict.css';
 
 const Predict = () => {
     const [features, setFeatures] = useState({
@@ -11,9 +13,9 @@ const Predict = () => {
         reserved_room_type: '1',
         deposit_type: '0',
         customer_type: '2',
-        year: '0',
-        month: '12',
-        day: '2',
+        // year: '0',
+        // month: '12',
+        // day: '2',
         lead_time: '3.135494',
         arrival_date_week_number: '3.951244',
         arrival_date_day_of_month: '2.944439',
@@ -32,7 +34,19 @@ const Predict = () => {
         total_of_special_requests: '0',
     });
 
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [prediction, setPrediction] = useState(null);
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        setFeatures({
+            ...features,
+            year: date.getFullYear().toString(),
+            arrival_date_day_of_month: date.getDate().toString(),
+            day: date.getDate().toString(),
+            month: (date.getMonth() + 1).toString() // Month is 0-indexed in JavaScript
+        });
+    };
 
     const handleChange = (e) => {
         setFeatures({
@@ -53,10 +67,9 @@ const Predict = () => {
                 company: Math.log(parseFloat(features.company) + 1),
                 adr: Math.log(parseFloat(features.adr) + 1),
             };
-
+            console.log(transformedFeatures);
             const res = await axios.post('http://localhost:4000/predict', { features: transformedFeatures });
 
-            // Extract and clean the JSON part from the result field
             const resultString = res.data.result;
             const jsonMatch = resultString.match(/\{.*\}/);
 
@@ -79,6 +92,17 @@ const Predict = () => {
     return (
         <div className="form-container">
             <form onSubmit={handleSubmit}>
+                {/* Date picker for selecting day and month */}
+                <div className="date-picker-container">
+                    <label htmlFor="arrival_date">Arrival Date:</label>
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy/MM/dd"
+                    />
+                </div>
+
+                {/* Dropdowns for categorical features */}
                 <select name="hotel" value={features.hotel} onChange={handleChange}>
                     <option value="0">Resort Hotel</option>
                     <option value="1">City Hotel</option>
@@ -143,8 +167,7 @@ const Predict = () => {
                     <option value="3">2017</option>
                 </select>
 
-                <input type="text" name="month" value={features.month} onChange={handleChange} placeholder="Month" />
-                <input type="text" name="day" value={features.day} onChange={handleChange} placeholder="Day" />
+
                 <input type="text" name="lead_time" value={features.lead_time} onChange={handleChange} placeholder="Lead Time" />
                 <input type="text" name="arrival_date_week_number" value={features.arrival_date_week_number} onChange={handleChange} placeholder="Arrival Date Week Number" />
                 <input type="text" name="arrival_date_day_of_month" value={features.arrival_date_day_of_month} onChange={handleChange} placeholder="Arrival Date Day of Month" />
@@ -156,6 +179,8 @@ const Predict = () => {
                 <input type="text" name="is_repeated_guest" value={features.is_repeated_guest} onChange={handleChange} placeholder="Is Repeated Guest" />
                 <input type="text" name="previous_cancellations" value={features.previous_cancellations} onChange={handleChange} placeholder="Previous Cancellations" />
                 <input type="text" name="previous_bookings_not_canceled" value={features.previous_bookings_not_canceled} onChange={handleChange} placeholder="Previous Bookings Not Canceled" />
+                <input type="text" name="lead_time" value={features.lead_time} onChange={handleChange} placeholder="Lead Time" />
+                <input type="text" name="arrival_date_week_number" value={features.arrival_date_week_number} onChange={handleChange} placeholder="Arrival Date Week Number" />
                 <input type="text" name="agent" value={features.agent} onChange={handleChange} placeholder="Agent" />
                 <input type="text" name="company" value={features.company} onChange={handleChange} placeholder="Company" />
                 <input type="text" name="adr" value={features.adr} onChange={handleChange} placeholder="ADR" />
