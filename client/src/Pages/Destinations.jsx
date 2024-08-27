@@ -27,6 +27,7 @@ const Destinations = () => {
 
   return (
     <div className="destinations">
+      <a class="dropdown-item" href="/destination/recommend">Serach Destinations</a>
       <h1>Popular Destinations</h1>
       <div className="grid">
         {destinations.map((destination) => (
@@ -39,6 +40,7 @@ const Destinations = () => {
           </div>
         ))}
       </div>
+      
     </div>
   );
 };

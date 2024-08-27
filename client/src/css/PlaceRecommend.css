@@ -1,0 +1,55 @@
+
+.background-container {
+    /*background-image: url('../pictures/place-bg.jpg');*/ /* Replace with your background image path */
+    background-size: cover;
+    background-position: center;
+    padding: 50px 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    color: white;
+}
+
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 20px;
+  }
+  
+  .card {
+    width: 1000px;
+    margin: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+  }
+
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.full-width-img {
+    width: 100%; /* Makes the image fit the width of the screen */
+    height: 300px; /* Maintains the aspect ratio */
+    object-fit: cover; /* Ensures the image covers the container if it's cropped */
+}
+
+
+
+
