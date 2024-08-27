@@ -13,7 +13,6 @@ const jwt = require("jsonwebtoken");
 const { spawn } = require('child_process');
 const { run } = require("./gemini-start.js");
 const { PythonShell } = require("python-shell");
-const { spawn } = require("child_process");
 
 const port = 4000;
 const secretKey = "your_secret_key"; // Define your secret key for JWT
