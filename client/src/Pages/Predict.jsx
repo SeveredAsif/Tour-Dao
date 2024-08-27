@@ -41,30 +41,23 @@ const Predict = () => {
         });
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         const res = await axios.post('http://localhost:4000/predict', { features });
-
-    //         // Clean the response data
-    //         const cleanedData = res.data.result;
-    //         const resultData = JSON.parse(cleanedData);
-    //         const prediction = resultData.prediction;
-    //         console.log("Cleaned Data:", prediction);
-
-    //         setPrediction(cleanedData);
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:4000/predict', { features });
+            const transformedFeatures = {
+                ...features,
+                lead_time: Math.log(parseFloat(features.lead_time) + 1),
+                arrival_date_week_number: Math.log(parseFloat(features.arrival_date_week_number) + 1),
+                arrival_date_day_of_month: Math.log(parseFloat(features.arrival_date_day_of_month) + 1),
+                agent: Math.log(parseFloat(features.agent) + 1),
+                company: Math.log(parseFloat(features.company) + 1),
+                adr: Math.log(parseFloat(features.adr) + 1),
+            };
+
+            const res = await axios.post('http://localhost:4000/predict', { features: transformedFeatures });
 
             // Extract and clean the JSON part from the result field
             const resultString = res.data.result;
-            // Use a regular expression to find the JSON part
             const jsonMatch = resultString.match(/\{.*\}/);
 
             if (jsonMatch) {
@@ -83,18 +76,73 @@ const Predict = () => {
         }
     };
 
-
     return (
         <div className="form-container">
             <form onSubmit={handleSubmit}>
-                <input type="text" name="hotel" value={features.hotel} onChange={handleChange} placeholder="Hotel" />
-                <input type="text" name="meal" value={features.meal} onChange={handleChange} placeholder="Meal" />
-                <input type="text" name="market_segment" value={features.market_segment} onChange={handleChange} placeholder="Market Segment" />
-                <input type="text" name="distribution_channel" value={features.distribution_channel} onChange={handleChange} placeholder="Distribution Channel" />
-                <input type="text" name="reserved_room_type" value={features.reserved_room_type} onChange={handleChange} placeholder="Reserved Room Type" />
-                <input type="text" name="deposit_type" value={features.deposit_type} onChange={handleChange} placeholder="Deposit Type" />
-                <input type="text" name="customer_type" value={features.customer_type} onChange={handleChange} placeholder="Customer Type" />
-                <input type="text" name="year" value={features.year} onChange={handleChange} placeholder="Year" />
+                <select name="hotel" value={features.hotel} onChange={handleChange}>
+                    <option value="0">Resort Hotel</option>
+                    <option value="1">City Hotel</option>
+                </select>
+
+                <select name="meal" value={features.meal} onChange={handleChange}>
+                    <option value="0">BB</option>
+                    <option value="1">FB</option>
+                    <option value="2">HB</option>
+                    <option value="3">SC</option>
+                    <option value="4">Undefined</option>
+                </select>
+
+                <select name="market_segment" value={features.market_segment} onChange={handleChange}>
+                    <option value="0">Direct</option>
+                    <option value="1">Corporate</option>
+                    <option value="2">Online TA</option>
+                    <option value="3">Offline TA/TO</option>
+                    <option value="4">Complementary</option>
+                    <option value="5">Groups</option>
+                    <option value="6">Undefined</option>
+                    <option value="7">Aviation</option>
+                </select>
+
+                <select name="distribution_channel" value={features.distribution_channel} onChange={handleChange}>
+                    <option value="0">Direct</option>
+                    <option value="1">Corporate</option>
+                    <option value="2">TA/TO</option>
+                    <option value="3">Undefined</option>
+                    <option value="4">GDS</option>
+                </select>
+
+                <select name="reserved_room_type" value={features.reserved_room_type} onChange={handleChange}>
+                    <option value="0">C</option>
+                    <option value="1">A</option>
+                    <option value="2">D</option>
+                    <option value="3">E</option>
+                    <option value="4">G</option>
+                    <option value="5">F</option>
+                    <option value="6">H</option>
+                    <option value="7">L</option>
+                    <option value="8">B</option>
+                </select>
+
+                <select name="deposit_type" value={features.deposit_type} onChange={handleChange}>
+                    <option value="0">No Deposit</option>
+                    <option value="1">Refundable</option>
+                    <option value="3">Non Refund</option>
+                </select>
+
+                <select name="customer_type" value={features.customer_type} onChange={handleChange}>
+                    <option value="0">Transient</option>
+                    <option value="1">Contract</option>
+                    <option value="2">Transient-Party</option>
+                    <option value="3">Group</option>
+                </select>
+
+                <select name="year" value={features.year} onChange={handleChange}>
+                    <option value="0">2015</option>
+                    <option value="1">2014</option>
+                    <option value="2">2016</option>
+                    <option value="3">2017</option>
+                </select>
+
                 <input type="text" name="month" value={features.month} onChange={handleChange} placeholder="Month" />
                 <input type="text" name="day" value={features.day} onChange={handleChange} placeholder="Day" />
                 <input type="text" name="lead_time" value={features.lead_time} onChange={handleChange} placeholder="Lead Time" />
