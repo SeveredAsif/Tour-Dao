@@ -1,41 +1,25 @@
-.search-input {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 8px;
+
+
+  .custom-number-input {
+    width: 120px;                /* Set the desired width */
+    padding: 8px;               /* Adjust padding for comfort */
+    border: 1px solid #ccc;     /* Define border style */
+    border-radius: 4px;         /* Add rounded corners */
+    text-align: center;         /* Center the number within the input */
+    font-size: 16px;            /* Adjust the font size */
+    color: #333;                /* Set text color */
+    background-color: #f9f9f9;  /* Set background color */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Add a subtle inner shadow */
+    box-sizing: border-box;     /* Include padding and border in the element's total width */
+    margin-top: -10px; 
   }
   
-  .search-button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  .custom-number-input:focus {
+    border-color: #007bff;      /* Change border color when focused */
+    outline: none;              /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a blue glow */
   }
   
-  .content {
-    margin-top: 20px;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   .hotel-search-container {
     position: relative;
@@ -60,6 +44,7 @@
   }
   
   .content {
+    height: 300px; 
     position: absolute;
     top: 50%;
     left: 50%;
@@ -80,18 +65,11 @@
     justify-content: center;
     align-items: center;
   }
-  
-  .search-input {
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+    
   .search-button {
     padding: 10px 20px;
     margin: 5px;
-    background-color: #007bff;
+    background-color: #3178c4;
     color: #fff;
     border: none;
     border-radius: 4px;

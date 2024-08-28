@@ -137,7 +137,7 @@ const HomePage = () => {
 
       <img src={prediction} className="card-img" alt="..." />
     <div className="card-img-overlay">
-      <h5 className="card-title">Check your Flight Price!</h5>
+       <h5 className="card-title" style={{ color: 'white' }}>Check your Flight Price!</h5>
       <Link to="/flight/price/prediction">
       <button type="button" class="btn btn-info">Explore</button>
     </Link>

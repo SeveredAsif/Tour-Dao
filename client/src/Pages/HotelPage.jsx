@@ -67,43 +67,57 @@ const HotelPage = () => {
         <div className="hotel-images">
           <img src={hotelImage} alt="Hotels" className="hotel-placeholder-image" />
         </div>
-        <div className="content">
+
+        <div className="content" >
           <h1>Hotel Search</h1>
           <form onSubmit={handleSubmit} className="search-bar">
-          <label className="input-label">Place:</label>
-            <input
+
+          <div className="row g-3">
+  <div className="col">
+  <input
               type="text"
               placeholder="Destination"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className="search-input"
+              style={{ width: '500px' }}
             />
-            <label className="input-label">Check In:</label>
+  </div>
+</div>
+
+<div className="row g-3">
+<div className="col-sm">
+  <label className="input-label">Guests:</label>
+  <input
+              type="number"
+              placeholder="Guests"
+              value={guests}
+              onChange={(e) => setGuests(parseInt(e.target.value))}
+              className="custom-number-input"
+            />
+  </div>
+  <div className="col-sm">
+  <label className="input-label">Check In:</label>
             <input
               type="date"
               placeholder="Check-in"
               value={checkIn}
               onChange={(e) => setCheckIn(e.target.value)}
-              className="search-input"
+              className="custom-number-input"
             />
-            <label className="input-label">Check Out:</label>
+  </div>
+  <div className="col-sm">
+  <label className="input-label">Check Out:</label>
             <input
               type="date"
               placeholder="Check-out"
               value={checkOut}
               onChange={(e) => setCheckOut(e.target.value)}
-              className="search-input"
+              className="custom-number-input"
             />
-            <label className="input-label">Guests:</label>
-            <input
-              type="number"
-              placeholder="Guests"
-              value={guests}
-              onChange={(e) => setGuests(parseInt(e.target.value))}
-              className="search-input"
-            />
+  </div>
+</div>
+          
             
-
             {/* Use Link component properly for navigation */}
             <Link to="/hotels/search/details">
               <button type="submit" className="search-button" onClick={handleSubmit}> 
@@ -111,6 +125,7 @@ const HotelPage = () => {
               </button>
             </Link>
           </form>
+
         </div>
       </div>
     </div>
