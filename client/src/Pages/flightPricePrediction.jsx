@@ -43,7 +43,7 @@ const FlightPricePrediction = () => {
   return (
 <div>
 
-<div className="card mb-3"  style={{ maxWidth: '800px' }}>
+<div className="card mb-3"  style={{ maxWidth: '800px' ,margin: '0 auto'}}>
   <div className="row g-0">
     <div className="col-md-4">
       <img src={flight} className="img-fluid rounded-start" alt="..." style={{ height: '1000px',width:'200px' }}/>
@@ -60,10 +60,13 @@ const FlightPricePrediction = () => {
             value={formData.source_city}
             onChange={handleChange}
             required>
-      <option selected>Select Source City</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
+      <option selected>Select Source:</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Bangalore">Bangalore</option>
+      <option value="Kolkata">Kolkata</option>
+      <option value="Hyderabad">Hyderabad</option>
+      <option value="Chennai">Chennai</option>
     </select>
   </div>
   <div className="col-md-6">
@@ -73,10 +76,13 @@ const FlightPricePrediction = () => {
             value={formData.destination_city}
             onChange={handleChange}
             required>
-      <option selected>Choose...</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
+      <option selected>Select Destination</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Bangalore">Bangalore</option>
+      <option value="Kolkata">Kolkata</option>
+      <option value="Hyderabad">Hyderabad</option>
+      <option value="Chennai">Chennai</option>
     </select>
   </div>
   <div className="col-12">
@@ -86,10 +92,13 @@ const FlightPricePrediction = () => {
             value={formData.airline}
             onChange={handleChange}
             required>
-      <option selected>Choose...</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
+      <option selected>Select Airline</option>
+      <option value="Vistara">Vistara</option>
+      <option value="Air_India">Air_India</option>
+      <option value="Indigo">Indigo</option>
+      <option value="GO_FIRST">GO_FIRST</option>
+      <option value="AirAsia">AirAsia</option>
+      <option value="SpiceJet">SpiceJet</option>
     </select>
   </div>
   <div className="col-12">
@@ -99,7 +108,7 @@ const FlightPricePrediction = () => {
             value={formData.cla}
             onChange={handleChange}
             required>
-      <option selected>Choose...</option>
+      <option selected>Select Business/Economy Class</option>
       <option value="1">Business</option>
       <option value="0">Economy</option>
     </select>
@@ -122,18 +131,15 @@ const FlightPricePrediction = () => {
   </div>
 
   <div className="col-12">
-    <button type="submit" className="btn btn-primary">Prediction</button>
+    <button type="submit" className="btn btn-outline-info">Prediction</button>
   </div>
 </form>
 
-      </div>
-    </div>
-  </div>
-</div> 
 {/* Display the prediction result */}
-{prediction && (
+<div className="alert alert-primary" role="alert" style={{ marginTop: '10px' }}>
+      {prediction && (
         <div>
-          <h5>Predicted Flight Price: {prediction}</h5>
+          <h5>Predicted Flight Price: $${prediction} </h5>
         </div>
       )}
 
@@ -143,6 +149,15 @@ const FlightPricePrediction = () => {
           <h3>{error}</h3>
         </div>
       )}
+</div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div> 
+
 
 
 </div>
