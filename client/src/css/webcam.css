@@ -1,64 +1,95 @@
-/* webcam.css */
-
-#image-classifier-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f7f7f7;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+/* Webcam.css */
+.container {
+  max-width: 800px;
+  margin: auto;
   text-align: center;
+  padding: 20px;
+  background-color: #f7f9fc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-  font-size: 24px;
+.header {
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
   color: #333;
-  margin-bottom: 20px;
 }
 
-input[type="file"] {
-  display: inline-block;
-  margin: 20px 0;
-  padding: 10px 15px;
+.header p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.upload-area {
+  border: 2px dashed #007bff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-area:hover {
+  background-color: #e9f3ff;
+}
+
+.upload-area input {
+  display: none;
+}
+
+.upload-area img {
+  margin-top: 20px;
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.classify-button {
   background-color: #007bff;
   color: white;
   border: none;
+  padding: 10px 20px;
   border-radius: 5px;
+  font-size: 1.2rem;
   cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
-input[type="file"]:hover {
+.classify-button:hover {
   background-color: #0056b3;
 }
 
-#uploaded-image {
-  display: block;
-  margin: 20px auto;
-  border: 2px solid #007bff;
-  border-radius: 10px;
-  max-width: 100%;
-  height: auto;
+.prediction-results {
+  margin-top: 30px;
+  text-align: left;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 15px;
-}
-
-button:hover {
-  background-color: #218838;
-}
-
-ul {
-  list-style-type: none;
+.prediction-results ul {
+  list-style: none;
   padding: 0;
-  margin-top: 20px;
 }
 
+.prediction-results li {
+  background: #f1f1f1;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
 
+.prediction-results li span {
+  font-weight: bold;
+}
+
+.footer {
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+}

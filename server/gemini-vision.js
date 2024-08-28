@@ -14,14 +14,14 @@ function fileToGenerativePart(path,mimeType){
     };
 }
 
-async function run(imageParts) {
+async function run() {
   const model = genAI.getGenerativeModel({
     model: "gemini-pro-vision",
   });
  // const prompt =
    // "Write a sonnet about a programmers life, but also make it rhyme.";
-  const prompt = "Where is the place?"
-  img = fileToGenerativePart(imageParts,"image/jpeg")
+  const prompt = ""
+  img = fileToGenerativePart("pythagoras.jpg","image/jpeg")
   const result = await model.generateContent(prompt, ...img);
   const response = await result.response;
   const text = response.text();
