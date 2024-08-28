@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Navbar from '../Components/Navbar';
+import Footer from '../Components/Footer';
 import flight from '../pictures/flight.jpg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -43,6 +45,7 @@ const FlightPricePrediction = () => {
   return (
 <div>
 
+<Navbar/>
 <div className="card mb-3"  style={{ maxWidth: '800px' ,margin: '0 auto'}}>
   <div className="row g-0">
     <div className="col-md-4">
@@ -159,7 +162,7 @@ const FlightPricePrediction = () => {
 </div> 
 
 
-
+<Footer/>
 </div>
   );
 };

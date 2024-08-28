@@ -12,6 +12,7 @@ import p3 from '../pictures/3.jpg';
 import ind from '../pictures/in.jpg';
 import m from '../pictures/m.jpg';
 import a from '../pictures/a.jpg';
+import prediction from '../pictures/prediction.jpg';
 import travel from '../pictures/travel1.jpg';
 
 const HomePage = () => {
@@ -128,6 +129,23 @@ const HomePage = () => {
         </div>
       </div>
     </div>
+
+
+
+<div style={{ display: 'grid', placeItems: 'center', height: '100vh', marginTop: '-180px' }}>
+  <div className="card text-bg-dark" style={{ maxWidth: '1000px' }}>
+
+      <img src={prediction} className="card-img" alt="..." />
+    <div className="card-img-overlay">
+      <h5 className="card-title">Check your Flight Price!</h5>
+      <Link to="/flight/price/prediction">
+      <button type="button" class="btn btn-info">Explore</button>
+    </Link>
+      
+      <p className="card-text"><small>Last updated 3 mins ago</small></p>
+    </div>
+  </div>
+</div>
 
 
    <Footer/>
