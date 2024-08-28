@@ -52,7 +52,7 @@ const FlightPricePrediction = () => {
       <div className="card-body">
         <h3 className="card-title">See Flight Price Prediction!</h3>
 
-        <form className="row g-3">
+        <form className="row g-3" onSubmit={handleSubmit}>
   <div className="col-md-6">
     <label for="inputEmail4" className="form-label">Source City:</label>
     <select id="inputState" className="form-select" type="text"
