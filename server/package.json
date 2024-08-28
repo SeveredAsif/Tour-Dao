@@ -21,9 +21,13 @@
     "express-session": "^1.18.0",
     "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
+    "nltk": "^0.0.1",
     "node-geocoder": "^4.3.0",
+    "numpy": "^0.0.1",
     "opencage-api-client": "^1.0.7",
+    "pandas": "^0.0.3",
     "python-shell": "^5.0.0",
+    "scikit-learn": "^0.1.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

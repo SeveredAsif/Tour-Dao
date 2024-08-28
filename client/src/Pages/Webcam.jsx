@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import '@tensorflow/tfjs';
-import "../css/webcam.css"
+import "../css/webcam.css";
+import Navbar from '../Components/Navbar'; // Importing Navbar component
 
 function ImageClassifier() {
     const [image, setImage] = useState(null);
@@ -26,25 +27,36 @@ function ImageClassifier() {
     };
 
     return (
-        <div>
-            <h1>Image Classifier</h1>
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-            <div>
-                {image && <img id="uploaded-image" src={image} alt="Uploaded" width="400px" />}
+        <>
+            <Navbar />
+        <div className="container">
+             {/* Including Navbar component */}
+            <header className="header">
+                <h1>SnapClassifier</h1>
+                <p>Upload your travel photos and let us identify the destination for you!</p>
+            </header>
+            <div className="upload-area" onClick={() => document.getElementById('image-input').click()}>
+                <input type="file" accept="image/*" onChange={handleImageUpload} id="image-input" style={{ display: 'none' }} />
+                <p>Click to upload an image or drag and drop here</p>
+                {image && <img id="uploaded-image" src={image} alt="Uploaded" />}
             </div>
-            <button onClick={classifyImage}>Classify Image</button>
-            <div>
+            <button className="classify-button" onClick={classifyImage}>Classify Image</button>
+            <div className="prediction-results">
                 {predictions.length > 0 && (
                     <ul>
                         {predictions.map((prediction, index) => (
                             <li key={index}>
-                                {prediction.className}: {(prediction.probability * 100).toFixed(2)}%
+                                <span>{prediction.className}:</span> {(prediction.probability * 100).toFixed(2)}%
                             </li>
                         ))}
                     </ul>
                 )}
             </div>
+            <footer className="footer">
+                <p>&copy; 2024 SnapClassifier. All rights reserved.</p>
+            </footer>
         </div>
+        </>
     );
 }
 

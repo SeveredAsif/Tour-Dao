@@ -33,6 +33,15 @@ const Dashboard = () => {
     }
   }, [username]);
 
+  const handleCheckCancellation = () => {
+    const password = prompt('Enter password to check cancellation probability:');
+    if (password === 'dummyPassword') {
+      window.location.href = 'http://localhost:3000/predict'; // Redirect to predict page
+    } else {
+      alert('Incorrect password');
+    }
+  };
+  
   const renderFlightBookings = () => {
     return flightBookings.length === 0 ? (
       <p>No flight bookings found.</p>
@@ -90,6 +99,9 @@ const Dashboard = () => {
             {activeTab === 'flights' ? renderFlightBookings() : renderHotelBookings()}
           </div>
         )}
+        <div className="check-cancellation">
+          <button onClick={handleCheckCancellation}>Check Cancellation Probability</button>
+        </div>
       </div>
     </div>
   );
