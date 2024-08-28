@@ -1,106 +1,155 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../Components/Navbar';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Link,useNavigate,useLocation } from 'react-router-dom';
+import flight from '../pictures/flight.jpg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
+import '../css/demo.css';
 
-const HotelDetails = () => {
-  const [hotels, setHotels] = useState([]);
-  const [randomPrices, setRandomPrices] = useState({});
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+const FlightPricePrediction = () => {
+  const [formData, setFormData] = useState({
+    stops: '',
+    cla: '',
+    days_left: '',
+    airline: '',
+    source_city: '',
+    destination_city: ''
+  });
 
-  const location = useLocation();
-  const bookingData = location.state;
-  const { destination, checkIn, checkOut, guests} = bookingData;
-  
- 
+  const [prediction, setPrediction] = useState(null);  // State to store the prediction result
+  const [error, setError] = useState(null);  // State to store error messages
 
-  /*const generateRandomNumber = () => {
-    return Math.floor(Math.random() * (200 - 100 + 1)) + 100;
-  };*/
-
-
-  const generateRandomNumber = (hotelName) => {
-    if (!randomPrices[hotelName]) {
-      // Generate a random price if not already generated for this hotel
-      const randomPrice = Math.floor(Math.random() * 1000);
-      setRandomPrices((prevPrices) => ({
-        ...prevPrices,
-        [hotelName]: randomPrice,
-      }));
-      return randomPrice;
-    } else {
-      // Return stored random price if already generated
-      return randomPrices[hotelName];
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
   };
 
-
-  const handleSubmit = (hotelName, price) => (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Ensure bookingData is defined and contains necessary fields
-    if (!bookingData || !bookingData.destination || !bookingData.checkIn || !bookingData.checkOut || !bookingData.guests||hotelName||price) {
-      console.error('Booking data is incomplete or undefined.');
-      return;
+    try {
+      console.log(formData);
+      const response = await axios.post('http://localhost:4000/flight/price/prediction', formData);
+      setPrediction(response.data.result);  // Update the prediction state with the response
+      setError(null);  // Clear any previous error
+    } catch (error) {
+      console.error('There was an error making the request:', error);
+      setError('Failed to get the prediction. Please try again.');
+      setPrediction(null);  // Clear any previous prediction
     }
-  
-    // Destructure bookingData
-    const { destination, checkIn, checkOut, guests } = bookingData;
-  
-    // Prepare data to send to next route
-    const FullbookingData = {
-       // Include all fields from bookingData
-      hotelName,      // Add hotelName to the booking data
-      price,          // Add price to the booking data
-    };
-  
-    console.log('Full Booking Data:', FullbookingData);
-  
-    // Navigate to next route with state
-    /*navigate('/hotels/booking/details', { state: FullbookingData });*/
   };
-
-  useEffect(() => {
-    axios.get("http://localhost:4000/hotels/search/details")
-      .then((response) => {
-        setHotels(response.data.data);
-
-      })
-      .catch((error) => {
-        setError(error); // Handle axios error
-      });
-  },[]);
 
   return (
-    <div className="hotel-page">
-      <Navbar />
-      {error ? (
-        <div>Error: {error.message}</div>
-      ) : (
-        <div className="hotels-list">
-          {hotels.map((hotel, index) => (
-            <div key={index} className="hotel-card">
-              <img src={hotel.photoUrl} alt={hotel.name} />
-              <h3>{hotel.name}</h3>
-              <p>{hotel.accessibilityLabel}</p>
-              <p>Review: {hotel.reviewScore}</p>
-              <p>Price: ${generateRandomNumber(hotel.name)}</p>
-             
-              <button
-                type="button" // Ensure type is "button" if it doesn't submit a form
-                className="search-button"
-               onClick={() => handleSubmit(hotel.name, randomPrices[hotel.name])}  >
-               Book Now
-             </button>
+<div>
+    <div classNameName="container-fluid blue-container blue-background py-5">
+      <div classNameName="row">
+        <div classNameName="col-md-6">
+          <img src={flight} classNameName="img-fluid rounded" alt="Left" />
+        </div>
+        <div classNameName="col-md-6 d-flex align-items-center">
+          <div classNameName="p-5">
 
-             
-            </div>
-          ))}
+          <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Stops:</label>
+          <input
+            type="number"
+            name="stops"
+            value={formData.stops}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>className:</label>
+          <input
+            type="number"
+            name="cla"
+            value={formData.cla}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Days Left:</label>
+          <input
+            type="number"
+            name="days_left"
+            value={formData.days_left}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Airline:</label>
+          <input
+            type="text"
+            name="airline"
+            value={formData.airline}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Source City:</label>
+          <input
+            type="text"
+            name="source_city"
+            value={formData.source_city}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div>
+          <label>Destination City:</label>
+          <input
+            type="text"
+            name="destination_city"
+            value={formData.destination_city}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <button type="submit">Predict Price</button>
+      </form>
+
+      {/* Display the prediction result */}
+      {prediction && (
+        <div>
+          <h3>Predicted Flight Price: {prediction}</h3>
         </div>
       )}
+
+      {/* Display any error message */}
+      {error && (
+        <div style={{ color: 'red' }}>
+          <h3>{error}</h3>
+        </div>
+      )}
+    </div>
+            
+            <div className="d-grid gap-2 d-md-block">
+
+         
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
     </div>
   );
 };
 
-export default HotelDetails;
+export default FlightPricePrediction;
