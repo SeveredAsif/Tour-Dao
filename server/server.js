@@ -708,7 +708,7 @@ app.get("/gemini", async (req, res) => {
 
 
 
-///////////////////////////////////destination
+///////////////////////////////////destination recommendation
 
 // Example of using spawn to run a Python script
 app.post('/destination/recommend', (req, res) => {
@@ -740,10 +740,42 @@ app.post('/destination/recommend', (req, res) => {
 
 
 
+/////////////////////////////flight prediction
 
 
+app.post('/flight/price/prediction', (req, res) => {
+  const { stops,cla,days_left,airline,source_city,destination_city } = req.body; // Get the query from the request body
 
+  const user_input = JSON.stringify({
+    'stops': parseInt(stops),
+    'class': parseInt(cla),
+    'days_left': parseInt(days_left),
+    'airline': airline,
+    'source_city': source_city,
+    'destination_city': destination_city
+});
+  console.log(user_input)
 
+  const pythonProcess = spawn('python', ['flightPricePrediction.py',user_input]);
+
+  let result = '';
+
+  pythonProcess.stdout.on('data', (data) => {
+      result += data.toString();
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+      if (code === 0) {
+          res.json({ result });
+      } else {
+          res.status(500).json({ error: 'Error running the Python script' });
+      }
+  });
+});
 
 
 

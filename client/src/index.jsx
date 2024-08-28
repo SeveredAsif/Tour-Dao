@@ -21,6 +21,7 @@ import Layout from "./Pages/Layout"; // Adjust the path as needed
 import Webcam from "./Pages/Webcam";
 import PlaceRecommend from "./Pages/PlaceRecommend"
 import Predict from "./Pages/Predict";
+import FlightPricePrediction from "./Pages/flightPricePrediction";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,8 @@ const router = createBrowserRouter([
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/logout", element: <Login /> },
       { path: "/webcam", element: <Webcam /> },
-      { path: "/predict", element: <Predict /> }
+      { path: "/predict", element: <Predict /> },
+      { path: "/flight/price/prediction", element: <FlightPricePrediction /> }
     ],
   },
 ]);

@@ -42,31 +42,33 @@ const FlightPricePrediction = () => {
 
   return (
 <div>
-    <div classNameNameName="container-fluid blue-container blue-background py-5">
-      <div classNameNameName="row">
-        <div classNameNameName="col-md-6">
-          <img src={flight} classNameNameName="img-fluid rounded" alt="Left" />
-        </div>
-        <div classNameNameName="col-md-6 d-flex align-items-center">
-          <div classNameNameName="p-5">
 
-          <form className="row g-3" onSubmit={handleSubmit}>
+<div className="card mb-3"  style={{ maxWidth: '800px' }}>
+  <div className="row g-0">
+    <div className="col-md-4">
+      <img src={flight} className="img-fluid rounded-start" alt="..." style={{ height: '1000px',width:'200px' }}/>
+    </div>
+    <div className="col-md-8">
+      <div className="card-body">
+        <h3 className="card-title">See Flight Price Prediction!</h3>
+
+        <form className="row g-3">
   <div className="col-md-6">
-  <label for="inputState" className="form-label">Source City:</label>
-    <select id="inputState" className="form-select"  type="text"
+    <label for="inputEmail4" className="form-label">Source City:</label>
+    <select id="inputState" className="form-select" type="text"
             name="source_city"
             value={formData.source_city}
             onChange={handleChange}
             required>
-      <option selected>Choose...</option>
+      <option selected>Select Source City</option>
       <option value="1">One</option>
       <option value="2">Two</option>
       <option value="3">Three</option>
     </select>
   </div>
   <div className="col-md-6">
-  <label for="inputState" className="form-label">Destination City:</label>
-    <select id="inputState" className="form-select"  type="text"
+    <label for="inputPassword4" className="form-label">Destination City:</label>
+    <select id="inputState" className="form-select" type="text"
             name="destination_city"
             value={formData.destination_city}
             onChange={handleChange}
@@ -78,10 +80,10 @@ const FlightPricePrediction = () => {
     </select>
   </div>
   <div className="col-12">
-  <label for="inputState" className="form-label">Airline:</label>
-    <select id="inputState" className="form-select"  type="text"
+    <label for="inputAddress" className="form-label">Airline:</label>
+    <select id="inputState" className="form-select" type="text"
             name="airline"
-            value={formData.cla}
+            value={formData.airline}
             onChange={handleChange}
             required>
       <option selected>Choose...</option>
@@ -90,52 +92,48 @@ const FlightPricePrediction = () => {
       <option value="3">Three</option>
     </select>
   </div>
-  <div className="col-md-12">
-    <label for="inputCity" className="form-label">Class</label>
-    <input className="form-control" id="inputCity"  type="number"
+  <div className="col-12">
+    <label for="inputAddress2" className="form-label">class:</label>
+    <select id="inputState" className="form-select" type="number"
             name="cla"
             value={formData.cla}
             onChange={handleChange}
-            required/>
+            required>
+      <option selected>Choose...</option>
+      <option value="1">Business</option>
+      <option value="0">Economy</option>
+    </select>
   </div>
   <div className="col-md-6">
-    <label for="inputState" className="form-label">Stops:</label>
-    <input className="form-control" id="inputCity"  type="number" placeholder="stops between flights"
+    <label for="inputCity" className="form-label">Stops:</label>
+    <input className="form-control" id="inputCity" type="number"
             name="stops"
             value={formData.stops}
             onChange={handleChange}
             required/>
   </div>
-
   <div className="col-md-6">
-    <label for="inputState" className="form-label">Days left:</label>
-     <select id="inputState" className="form-select"  type="number"
-            name="airline"
+    <label for="inputCity" className="form-label">Days left:</label>
+    <input className="form-control" id="inputCity" type="number"
+            name="days_left"
             value={formData.days_left}
             onChange={handleChange}
-            required>
-      <option selected>Choose...</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
-    </select>        
+            required/>
   </div>
 
   <div className="col-12">
-  <button type="submit">Predict Price</button>
+    <button type="submit" className="btn btn-primary">Prediction</button>
   </div>
 </form>
 
-          <div>
-
-  
-
-
-
-      {/* Display the prediction result */}
-      {prediction && (
+      </div>
+    </div>
+  </div>
+</div> 
+{/* Display the prediction result */}
+{prediction && (
         <div>
-          <h3>Predicted Flight Price: {prediction}</h3>
+          <h5>Predicted Flight Price: {prediction}</h5>
         </div>
       )}
 
@@ -145,17 +143,9 @@ const FlightPricePrediction = () => {
           <h3>{error}</h3>
         </div>
       )}
-    </div>
-            
-          </div>
-        </div>
-      </div>
-    </div>
 
 
-
-
-    </div>
+</div>
   );
 };
 
