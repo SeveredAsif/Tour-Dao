@@ -27,7 +27,7 @@ const initDb = (dbFilePath) => {
             db.run(insert, [
               "New York",
               4,
-              "https://images.unsplash.com/photo-1529154036614-a60975f5c760?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://plus.unsplash.com/premium_photo-1672082110907-6d4106ee9e4d?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             ]);
             db.run(insert, [
               "Tokyo",
@@ -42,7 +42,7 @@ const initDb = (dbFilePath) => {
             db.run(insert, [
               "Rome",
               4,
-              "https://plus.unsplash.com/premium_photo-1672082110907-6d4106ee9e4d?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://images.unsplash.com/photo-1529154036614-a60975f5c760?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             ]);
             console.log("Dummy data inserted into destinations table.");
           }
@@ -111,4 +111,4 @@ const initDb = (dbFilePath) => {
   return db;
 };
 
-module.exports = initDb;
+initDb('./tour.db');
