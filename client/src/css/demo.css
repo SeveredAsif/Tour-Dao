@@ -1,0 +1,154 @@
+
+.search-input {
+    padding: 2px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 8px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    width: calc(25% - 12px); /* Adjust width to fit 4 inputs in a row, considering margins */
+  }
+
+  .search-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+
+  .content {
+    height: 200px;    /* Set the desired height */
+    width: 50%;       /* Set the desired width (use percentage or fixed units) */
+    margin-top: 50px; /* Adjust the top margin */
+    margin-bottom: 20px; /* Optional: Set bottom margin if needed */
+    margin-left: auto;  /* Optional: Center horizontally */
+    margin-right: auto; /* Optional: Center horizontally */
+    /* Add other styles as needed */
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .hotel-search-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .hotel-images {
+    position: relative;
+    width: 100%;
+    height: 600px; /* Adjust height as needed */
+    overflow: hidden; /* Ensure the image doesn't overflow */
+  }
+  
+  .hotel-placeholder-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire container */
+  }
+  
+  .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9); /* Optional: Add a semi-transparent background */
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1; /* Ensure the form is above the image */
+  }
+  
+  .content h1 {
+    margin-bottom: 10px;
+  }
+  
+  .search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .search-input {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .search-button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
+
+
+
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-toggle {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .checkbox-label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .checkbox-label input {
+    margin-right: 8px;
+  }
+  
