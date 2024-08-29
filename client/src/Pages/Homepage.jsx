@@ -119,7 +119,7 @@ const HomePage = () => {
       <Link to="/login">
       <button class="btn btn-outline-warning button-gap" type="button">Login</button>
       </Link> 
-      <Link to="/register">
+      <Link to="/registration">
       <button class="btn btn-outline-warning" type="button">Register</button>
       </Link>        
          
